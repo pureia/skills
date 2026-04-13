@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { componentNameProps } from './index';
+import type { ComponentNameEmits } from './index';
+
 defineOptions({
   name: '【ComponentName】',
   options: { virtualHost: true, styleIsolation: 'shared' },
 });
+
+const props = defineProps(componentNameProps);
+const emit = defineEmits<ComponentNameEmits>();
 
 </script>
 
@@ -12,13 +18,9 @@ defineOptions({
   </view>
 </template>
 
-<!-- 组件复杂样式（复杂样式才需要引入） -->
-<style scoped lang="scss" src="./index.scss"></style>
-
-<!-- 组件简单样式（简单样式才需要引入） -->
+<!-- 样式复杂时拆分到 index.scss，简单样式直接写在此处 -->
 <style scoped lang="scss">
-.component-name-wrap {
+.【component-name】-wrap {
 
 }
 </style>
-

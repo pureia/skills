@@ -6,10 +6,11 @@ export const componentNameProps = {
     type: [String, Number],
     default: '',
   },
-  /** 返回 */
-  back: {
-    type: Function as PropType<() => void>,
-    default: () => void 0,
-  },
 };
 type ComponentNameProps = ExtractPropTypes<typeof componentNameProps>;
+
+export interface ComponentNameEmits {
+  (e: 'back'): void;
+}
+
+export type { ComponentNameProps };

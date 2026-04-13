@@ -94,9 +94,9 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 #### 组件
 ```
 {component-path}/
-├── [name|index].vue  # 必需（全局用 name.vue，其余用 index.vue）→ assets/template/components/component-vue-template.vue
-├── index.scss        # 可选 → assets/template/component-scss-template.scss
-├── index.ts          # 可选 → assets/template/components/component-ts-template.ts
+├── [name|index].vue  # 必需（全局用 {name}.vue 以符合 easycom，其余用 index.vue）→ assets/template/components/component.vue
+├── index.scss        # 可选 → assets/template/components/index.scss
+├── index.ts          # 可选 → assets/template/components/index.ts
 ├── types.d.ts        # 可选，组件类型定义文件
 └── components/       # 可选，嵌套子组件
 ```
@@ -109,7 +109,7 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 ```
 
 #### Hooks
-- 文件：`use-{feature}.ts`（camelCase 命名）
+- 文件：`use{Feature}.ts`（camelCase 命名）
 - 模板：`assets/template/hook.ts`
 
 #### Store
@@ -123,19 +123,22 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 > 仅用于未明确归属页面/组件/API/Hook 的独立类型文件
 - 全局：`src/types/{name}.d.ts`
 - 模块：`src/types/modules/{name}.d.ts`
-- 模板：`assets/template/types-template.d.ts`
+- 模板：`assets/template/types.d.ts`
 
 #### 工具函数
 - 文件：`src/utils/{name}.ts`（kebab-case）
 - 导出独立函数，每个函数含 JSDoc 注释
+- 模板：`assets/template/util.ts`
 
 #### 服务模块
 - 文件：`src/services/{name}.ts`（kebab-case）
 - 封装业务逻辑，可调用 API 和 Store
+- 模板：`assets/template/service.ts`
 
 #### 配置文件
 - 文件：`src/config/{name}.config.ts`（kebab-case，以 `.config.ts` 结尾）
 - 导出配置对象，使用 `as const` 保证类型推断
+- 模板：`assets/template/config.ts`
 
 #### 静态资源
 - 图标放 `icons/`，图片放 `images/`
@@ -149,7 +152,7 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 |------|------|------|
 | 目录 | kebab-case | `user-info`, `order-list` |
 | Vue文件 | kebab-case | `index.vue`, `user-card.vue` |
-| TS文件 | kebab-case | `index.ts`, `use-form.ts` |
+| TS文件 | kebab-case | `index.ts`, `helpers.ts` |
 | SCSS文件 | kebab-case | `index.scss` |
 | 组件名 | kebab-case | `user-card` |
 | Hooks文件 | camelCase | `useForm.ts`, `usePageRefresh.ts` |
@@ -163,7 +166,7 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 {
   "pages": [
     {
-      "path": "pages/main/views/{page}/index",
+      "path": "pages/main/views/{page}/index"
     }
   ],
   "subPackages": [
@@ -171,7 +174,7 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
       "root": "pages/{pkg}",
       "pages": [
         {
-          "path": "views/{page}/index",
+          "path": "views/{page}/index"
         }
       ]
     }
@@ -210,16 +213,18 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 ## 注意事项
 
 1. 非TabBar页面应放入分包，减少主包体积
-2. 多模块共用组件放 `src/components/`，模块私有放对应分包
-3. 模块私有API放模块目录下，公共API放 `src/api/`
-4. 页面/组件类型放同目录 `types.d.ts`，全局类型放 `src/types/`
-5. 小图标建议使用字体图标，大图片放对应模块 `static/`
-6. 组件名 kebab-case，`defineOptions.name` 用 PascalCase
-7. 创建前必须检查路径是否已存在，避免意外覆盖
-8. 修改 `pages.json` 后必须验证 JSON 格式
-9. 工具函数保持单一职责，含 JSDoc 注释
-10. 服务层封装业务逻辑，不应在组件中直接调用 API
-11. 配置文件使用 `as const` 确保类型推断
+2. 每个分包体积不超过 2MB，总包体积不超过 20MB（微信小程序限制）
+3. 多模块共用组件放 `src/components/`，模块私有放对应分包
+4. 模块私有API放模块目录下，公共API放 `src/api/`
+5. 页面/组件类型放同目录 `types.d.ts`，全局类型放 `src/types/`
+6. 小图标建议使用字体图标，大图片放对应模块 `static/`
+7. 组件名 kebab-case，`defineOptions.name` 用 PascalCase
+8. 创建前必须检查路径是否已存在，避免意外覆盖
+9. 修改 `pages.json` 后必须验证 JSON 格式
+10. 工具函数保持单一职责，含 JSDoc 注释
+11. 服务层封装业务逻辑，不应在组件中直接调用 API
+12. 配置文件使用 `as const` 确保类型推断
+13. 全局组件遵循 easycom 规范：组件目录名与 Vue 文件名一致（如 `src/components/user-card/user-card.vue`），方可自动注册无需手动 import
 
 ## 相关 Skill
 - **API 使用规范**：创建、添加、优化、更新接口或接口类型时配合使用

@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { onShow } from '@dcloudio/uni-app';
+import { onLoad } from '@dcloudio/uni-app';
 import { usePage } from '.';
 
 defineOptions({ name: '【PageName】' });
 
 const { page } = usePage();
 
-onShow(() => {
+onLoad((query) => {
 
 });
 </script>
 
 <template>
+  <!-- page-wrapper 为项目自定义布局组件，提供统一页面容器 -->
   <page-wrapper>
     <view class="page-inner-wrap">
       <!-- 页面内容 -->
@@ -19,13 +20,9 @@ onShow(() => {
   </page-wrapper>
 </template>
 
-<!-- 页面复杂样式（复杂样式才需要引入） -->
-<style scoped lang="scss" src="./index.scss"></style>
-
-<!-- 页面简单样式（简单样式不需要引入） -->
+<!-- 样式复杂时拆分到 index.scss，简单样式直接写在此处 -->
 <style scoped lang="scss">
-.page-inner-wrap {  
+.page-inner-wrap {
 
 }
 </style>
-
