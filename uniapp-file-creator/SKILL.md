@@ -1,14 +1,198 @@
 ---
 name: UniApp 文件创建
-description: 在 UniApp 项目中按规范创建和修改文件及文件夹。
+description: 在 UniApp 项目中按规范创建或修改文件及文件夹，提供完整的目录结构、命名规范与文件模板。
 ---
 
 # UniApp 文件创建
 
-帮助在 UniApp 项目中按照规范创建和修改各类文件及文件夹。提供完整的目录结构规范、命名规范和文件模板。
+## 能力
+- 在 UniApp 项目中按照标准目录结构创建页面、组件、API、Hooks、Store、类型定义及静态资源。
+- 提供命名规范、文件模板，并自动更新 `pages.json` 路由配置。
+- 协助迁移和重构不符合规范的文件结构。
+
+## 使用场景
+- 新增主包页面或分包页面。
+- 新增全局公共组件或模块私有组件。
+- 在 `api/` 或分包 `api/` 目录下新增接口模块。
+- 在 `hooks/` 或分包 `hooks/` 目录下创建可复用组合式函数。
+- 在 `stores/` 下添加新的 Pinia 模块。
+- 在全局 `types/` 或页面/组件同目录下补充 TypeScript 类型定义。
+- 按规范存放图标、图片等静态资源。
+- 对现有项目目录进行规范化重构。
+
+## 工作流程
+
+### Step 1: 解析需求
+- 识别用户需要创建或修改的文件类型（页面/组件/API/Hook/静态资源等）及所属模块（全局/主包/分包）。
+
+### Step 2: 确定所属目录路径
+根据需要创建或修改的文件类型及所属模块，按以下规则推导目标所属目录路径。
+> 文件目录的命名一律遵循 **kebab-case**
+
+#### 1. 页面文件
+
+- **主包页面（TabBar 页面）** 
+  路径：`src/pages/main/views/{page-name}/` 
+  示例：`src/pages/main/views/home/`
+
+- **分包页面** 
+  路径：`src/pages/{subpackage-name}/views/{page-name}/` 
+  示例：`src/pages/order/views/list/`
+
+#### 2. 组件文件
+
+- **全局公共组件** 
+  路径：`src/components/{component-name}/` 
+  示例：`src/components/user-card/`
+
+- **分包私有组件** 
+  路径：`src/pages/{subpackage-name}/components/{component-name}/` 
+  示例：`src/pages/order/components/order-item/`
+
+- **页面私有组件** 
+  路径：`src/pages/{module}/views/{page-name}/components/{component-name}/` 
+  示例：`src/pages/order/views/detail/components/pay-bar/`
+
+- **组件内部子组件（嵌套组件）** 
+  仅在该组件内部使用的子组件，存放于该组件目录下的 `components/` 子目录中。 
+  路径：`{parent-component-path}/components/{sub-component-name}/` 
+  示例： 
+  - 全局组件内的子组件：`src/components/form-modal/components/form-item/` 
+  - 分包组件内的子组件：`src/pages/order/components/order-card/components/goods-cell/` 
+  - 页面私有组件内的子组件：`src/pages/order/views/detail/components/pay-bar/components/coupon-selector/`
+
+#### 3.API文件
+
+- **全局公共 API** 
+  路径：`src/api/common/`（公共接口模块） 
+  示例：`src/api/common/`
+
+- **公共模块 API（按业务划分）** 
+  路径：`src/api/{module-name}/` 
+  示例：`src/api/order/`
+
+- **主包私有 API** 
+  路径：`src/pages/main/api/{page-name}/` 
+  示例：`src/pages/main/api/home/`
+
+- **分包私有 API** 
+  路径：`src/pages/{subpackage-name}/api/{page-name}/` 
+  示例：`src/pages/order/api/order-query/`
+
+#### 4. Hooks 文件
+
+- **全局 Hooks** 
+  路径：`src/hooks/` 
+  示例：`src/hooks/`
+
+- **主包公共 Hooks** 
+  路径：`src/pages/main/hooks/` 
+  示例：`src/pages/main/hooks/`
+
+- **分包公共 Hooks** 
+  路径：`src/pages/{package-name}/hooks/` 
+  示例：`src/pages/order/hooks/`
+
+- **页面私有 Hooks**（仅当前页面使用） 
+  路径：`src/pages/{module}/views/{page-name}/hooks/` 
+  示例：`src/pages/order/views/detail/hooks/`
+
+#### 5. Store 文件（Pinia）
+
+- **全局 Store** 
+  路径：`src/stores/{store-name}/` 
+  示例：`src/stores/user/`
+
+#### 6. 类型定义文件
+> 只用于未明确文件类型（页面/组件/API/Hook）的类型定义文件
+
+- **全局类型** 
+  路径：`src/types/` 
+  示例：`src/types/`
+
+- **全局模块类型**
+  路径：`src/types/modules/` 
+  示例：`src/types/modules/`
+
+#### 7. 静态资源
+
+- **全局静态资源** 
+  - 图标：`src/static/icons/` 
+  - 图片：`src/static/images/` 
+  示例：`src/static/icons/`
+
+- **主包静态资源** 
+  - 图标：`src/pages/main/static/icons/` 
+  - 图片：`src/pages/main/static/images/` 
+  示例：`src/pages/main/static/icons/`
+
+- **分包静态资源** 
+  - 图标：`src/pages/{subpackage-name}/static/icons/` 
+  - 图片：`src/pages/{subpackage-name}/static/images/` 
+  示例：`src/pages/order/static/icons/`
+
+### Step 3: 创建目录
+- 使用对应系统的命令创建所需文件夹。
+   - Windows: `New-Item -ItemType Directory -Force -Path "路径"`
+   - macOS/Linux: `mkdir -p 路径`
+
+### Step 4: 生成文件
+根据需要创建或修改的文件类型及所属模块，按以下规则生成文件：
+
+#### 1. 页面文件
+- 页面目录
+  ├── index.vue       # 页面视图（必需）
+  ├── index.scss      # 页面样式（必需）
+  ├── index.ts        # 页面逻辑（可选，复杂逻辑抽离）
+  └── types.d.ts      # 类型定义（可选）
+- **index.vue（必需）**：参考模板：`assets/template/page/index.vue`
+- **index.scss（必需）**：参考模板：`assets/template/page/index.scss`
+- **index.ts（可选）**：参考模板：`assets/template/page/index.ts`
+
+#### 2. 组件文件
+- 组件目录
+  ├── [component-name | index].vue       # 组件视图（组件名（全局公共组件使用）或 index.vue）（必需）
+  ├── index.scss      # 组件样式（可选）
+  ├── index.ts        # 组件逻辑（可选，复杂逻辑抽离）
+  └── types.d.ts      # 类型定义（可选）
+- **[component-name | index].vue（必需）**：参考模板：`assets/template/components/component-vue-template.vue`
+- **index.scss（可选）**：参考模板：`assets/template/component-scss-template.scss`
+- **index.ts（可选）**：参考模板：`assets/template/component-ts-template.ts`
+- **types.d.ts（可选）**：参考模板：`assets/template/types-template.d.ts`
+
+#### 3. API 文件
+- API 目录
+  ├── index.ts        # 接口定义（必需）
+  └── types.d.ts      # 类型定义（可选）
+- **index.ts（必需）**：参考模板：`assets/template/api-index-template.ts`
+- **types.d.ts（可选）**：参考模板：`assets/template/api-types-template.d.ts`
+
+#### 4. Hooks 文件
+- **全局 Hooks**：`src/hooks/use-[feature].ts`
+- **分包 Hooks**：`src/pages/[module]/hooks/use-[feature].ts`
+- **文件模板**：参考模板：`assets/template/hooks-template.ts`
+
+#### 5. Store 文件（Pinia）
+- Store 目录
+  └── [store-name].ts  # 状态定义（必需）
+- **[store-name].ts（必需）**：参考模板：`assets/template/store-template.ts`
+
+#### 6. 类型定义文件
+- **全局类型**：`src/types/[name].d.ts`
+- **模块类型**：`src/types/modules/[name].d.ts`
+
+#### 7. 静态资源
+- **图标资源**：存放于 `icons/` 目录
+- **图片资源**：存放于 `images/` 目录
+- **命名规范**：使用 kebab-case，如 `user-avatar.png`、`icon-home.svg`
+
+### Step 5: 更新配置
+- 若为页面，在 `pages.json` 中注册路由。
+
+### Step 6: 输出检查清单
+- 提醒用户完成后续验证项。
 
 ## 相关 Skill
-
 - **API 使用规范**：创建、添加、优化、更新接口或接口类型时配合使用。提供请求封装、类型定义、命名规范等指南。
 
 ---
@@ -82,6 +266,7 @@ src/
 ├── manifest.json                 # 应用配置
 ├── pages.json                    # 页面路由配置
 └── uni.scss                      # 全局样式变量
+
 ```
 
 ---
