@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { componentNameProps } from './index';
-import type { ComponentNameEmits } from './index';
+import { componentNameProps } from '.';
 
 defineOptions({
   name: '【ComponentName】',
@@ -8,8 +7,6 @@ defineOptions({
 });
 
 const props = defineProps(componentNameProps);
-const emit = defineEmits<ComponentNameEmits>();
-
 </script>
 
 <template>

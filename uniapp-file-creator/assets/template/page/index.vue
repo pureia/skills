@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { onLoad } from '@dcloudio/uni-app';
 import { usePage } from '.';
 
 defineOptions({ name: '【PageName】' });
 
 const { page } = usePage();
-
-onLoad((query) => {
-
-});
 </script>
 
 <template>
@@ -23,6 +18,6 @@ onLoad((query) => {
 <!-- 样式复杂时拆分到 index.scss，简单样式直接写在此处 -->
 <style scoped lang="scss">
 .page-inner-wrap {
-
+  
 }
 </style>

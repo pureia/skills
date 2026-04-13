@@ -110,35 +110,30 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 
 #### Hooks
 - 文件：`use{Feature}.ts`（camelCase 命名）
-- 模板：`assets/template/hook.ts`
 
 #### Store
 ```
 {store-path}/
-├── index.ts       # 必需 → assets/template/store/index.ts
+├── index.ts       # 必需, Store 模块入口文件
 └── types.d.ts     # 可选，Store类型定义文件
 ```
 
 #### 类型定义
 > 仅用于未明确归属页面/组件/API/Hook 的独立类型文件
 - 全局：`src/types/{name}.d.ts`
-- 模块：`src/types/modules/{name}.d.ts`
-- 模板：`assets/template/types.d.ts`
+- 公共模块：`src/types/modules/{name}.d.ts`
 
 #### 工具函数
 - 文件：`src/utils/{name}.ts`（kebab-case）
 - 导出独立函数，每个函数含 JSDoc 注释
-- 模板：`assets/template/util.ts`
 
 #### 服务模块
 - 文件：`src/services/{name}.ts`（kebab-case）
 - 封装业务逻辑，可调用 API 和 Store
-- 模板：`assets/template/service.ts`
 
 #### 配置文件
 - 文件：`src/config/{name}.config.ts`（kebab-case，以 `.config.ts` 结尾）
 - 导出配置对象，使用 `as const` 保证类型推断
-- 模板：`assets/template/config.ts`
 
 #### 静态资源
 - 图标放 `icons/`，图片放 `images/`
