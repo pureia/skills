@@ -109,6 +109,8 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 └── types.d.ts     # 可选，API类型定义文件 → assets/template/api/types.d.ts
 ```
 
+> **📌 创建或修改 API 文件时**：请务必查阅 [API 使用规范](references/api-usage.md)，遵循请求封装、类型定义、函数命名等规范。
+
 #### Hooks
 - 文件：`use{Feature}.ts`（camelCase 命名）
 
@@ -203,6 +205,12 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 
 ### 关联文件
 - [ ] 类型定义、API、Hooks、Store 已按需创建
+
+---
+
+## 参考文档
+
+- [API 使用规范](references/api-usage.md) - API 接口编写规范，包含请求封装、类型定义、命名规范等
 
 ---
 
