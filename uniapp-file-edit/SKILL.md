@@ -1,9 +1,9 @@
 ---
-name: UniApp 文件创建
-description: 在 UniApp 项目中按规范创建或修改文件及文件夹
+name: UniApp 文件编辑
+description: 在 UniApp 项目中按规范编辑文件及文件夹
 ---
 
-# UniApp 文件创建
+# UniApp 文件编辑
 
 ## 能力
 - 在 UniApp 项目中按标准目录结构创建页面、组件、API、Hooks、Store、类型定义、工具函数、服务模块、配置文件及静态资源
@@ -51,6 +51,7 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 ---
 
 ## 文件规范
+> 严格按规范文档执行，避免创建或修改不符合规范的文件。
 
 ### 路径规则
 
@@ -103,13 +104,12 @@ description: 在 UniApp 项目中按规范创建或修改文件及文件夹
 ```
 
 #### API
+> **📌 创建或修改 API 文件时**：请务必查阅 [API 使用规范](references/api-usage.md)，遵循请求封装、类型定义、函数命名等规范。
 ```
 {api-path}/
 ├── index.ts       # 必需 → assets/template/api/index.ts
 └── types.d.ts     # 可选，API类型定义文件 → assets/template/api/types.d.ts
 ```
-
-> **📌 创建或修改 API 文件时**：请务必查阅 [API 使用规范](references/api-usage.md)，遵循请求封装、类型定义、函数命名等规范。
 
 #### Hooks
 - 文件：`use{Feature}.ts`（camelCase 命名）
