@@ -1,6 +1,6 @@
 ---
 name: UniApp 文件编辑
-description: 在 UniApp 项目中按规范编辑文件及文件夹
+description: 用于在 UniApp 项目中按规范创建、编辑及重构文件与目录结构，涵盖页面、组件、API、Hooks、Store、类型定义、工具函数、服务模块、配置文件及静态资源
 ---
 
 # UniApp 文件编辑
