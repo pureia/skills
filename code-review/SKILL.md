@@ -16,8 +16,7 @@ This skill guides the agent in conducting professional and thorough code reviews
 - **If changes are extensive**: Focus on core logic files first; group findings by module and output in batches rather than reviewing every line equally.
 
 ### 2. In-Depth Analysis
-> Read surrounding code context for modified files to understand intent. 
-> Check project config files to align with the project's own style and rules.
+> Read surrounding code context for modified files to understand intent. Check project config files to align with the project's own style and rules.
 
 Analyze the code changes based on the following pillars:
 
