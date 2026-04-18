@@ -13,64 +13,108 @@ From the perspective of a code review expert, use this skill to guide the agent 
 *   Check status: `git status`
 *   Read diffs: `git diff` (working tree) and/or `git diff --staged` (staged). Also check untracked files with `git ls-files --others --exclude-standard`.
 - **If no changes (including untracked files)**: Inform the user "No local changes found to review." and stop.
-- **If changes exceed 1500 lines or 10 files**: Focus on core logic files first; group findings by module and output in batches (e.g., 5 files per batch) rather than reviewing every line equally.
+- **If changes are extensive**: Focus on core logic files first; group findings by module and output in batches rather than reviewing every line equally.
 
-### 2. In-Depth Analysis & Confidence Thresholds
-> Read surrounding code context for modified files to understand intent. Check project config files to align with the project's own style and rules.
+### 2. Collect Review Context (CRITICAL FOR ACCURACY)
 
-Analyze changes against the following dimensions. **Only report issues that meet the specified confidence threshold**. When in doubt, raise questions.
+*Before analyzing, gather sufficient context. **Do not rely on `git diff` fragments alone.** *
 
-| Dimension | Severity & Threshold | Core Focus (Quick Reference) |
+#### 2.1 Read Full Files
+- For every file with changes, read the **entire file content** (not just the diff hunks).
+- This is mandatory to understand surrounding logic, function signatures, and imports.
+- **Exception**: If a file exceeds 500 lines, read only the changed functions and their surrounding 50 lines instead of the entire file.
+
+#### 2.2 Read Related Test Files
+- If a changed file has a corresponding test file (e.g., `src/foo.ts` → `tests/foo.test.ts`), read that test file as well.
+- Absence of test coverage for new logic is itself a finding (report as WARNING under **Testability**).
+
+#### 2.3 Read Project Configurations
+- Locate and read **ONE** of the following (whichever exists):
+  - Linter config: `.eslintrc.*`, `prettier.config.*`, `pyproject.toml`, `ruff.toml`, `.rubocop.yml`, `checkstyle.xml`
+  - Type/Language config: `tsconfig.json`, `Cargo.toml`, `go.mod`, `pom.xml`, `build.gradle`
+- Use these to **suppress style nitpicks** that the project's tooling already enforces.
+
+#### 2.4 Explicit Skip List
+- **Do NOT review** the following file types, even if they appear in `git status`:
+  - Lock files (`package-lock.json`, `yarn.lock`, `Cargo.lock`, `poetry.lock`)
+  - Minified bundles (`*.min.js`, `*.min.css`)
+  - Generated code (`*.pb.go`, `*.graphqlgen.ts`, `__pycache__/`)
+  - Binary files and images
+
+### 3. In-Depth Analysis
+
+*Before filing any issue, briefly summarize the intent of each changed file in one sentence. Understanding purpose prevents false positives.*
+
+Analyze changes against the following dimensions. **Only report issues that meet the severity definitions.** When in doubt, raise questions.
+
+| Dimension | Severity | Core Focus (Quick Reference) |
 | :--- | :--- | :--- |
-| **Security** | **CRITICAL ≥95%** | Injection, XSS, auth bypass, hardcoded secrets |
-| **Crash & Data Loss** | **CRITICAL ≥95%** | Unhandled rejections, null pointers, infinite loops |
-| **Logic & Correctness** | **WARNING ≥85%** | Race conditions, off-by-one, incorrect async, edge cases |
-| **Error Handling** | **WARNING ≥85%** | Swallowed exceptions, missing try/catch, brittle assumptions |
-| **Performance & Leaks** | **WARNING ≥85%** | N+1 queries, memory leaks, blocking I/O |
-| **Maintainability** | **SUGGESTION ≥80%** | Testability, magic numbers, missing JSDoc, tight coupling |
-| **Readability** | **SUGGESTION ≥75%** | Misleading names, inconsistent conventions, excessive length |
+| **Security** | CRITICAL | Injection, XSS, auth bypass, hardcoded secrets |
+| **Crash & Data Loss** | CRITICAL | Unhandled errors/exceptions, null/nil dereferences, infinite loops |
+| **Logic & Correctness** | WARNING | Race conditions, off-by-one, incorrect async/concurrent flow, edge cases |
+| **Error Handling** | WARNING | Swallowed exceptions, missing retry logic, brittle assumptions |
+| **Performance & Leaks** | WARNING | N+1 queries, memory leaks, blocking I/O on critical paths |
+| **Testability** | WARNING | Missing tests for new logic, untestable tight coupling |
+| **Maintainability** | SUGGESTION | Magic numbers, missing documentation, unclear module boundaries |
+| **Readability** | SUGGESTION | Misleading names, inconsistent conventions, excessive function length |
+
+#### Severity Definitions
+
+| Severity | Meaning | When to Use |
+| :--- | :--- | :--- |
+| **CRITICAL** | I am highly confident this is a problem that must be fixed immediately. | Security vulnerabilities, guaranteed crashes, data corruption risks. |
+| **WARNING** | This is very likely a problem and strongly should be fixed. | Logic flaws, resource leaks, fragile error handling, missing tests. |
+| **SUGGESTION** | This is a potential improvement for your consideration. | Readability, maintainability, minor performance optimizations. |
 
 #### Expanded Guidance for Analysis
-When performing in-depth review, use the following prompts to guide your inspection of each dimension:
 
-- **Security**: Does this change introduce vulnerabilities that compromise confidentiality, integrity, or availability? Check for unsanitized input reaching database queries, user-controlled HTML rendering, missing authorization checks, or exposed secrets in logs/config.
-- **Crash & Data Loss**: Could this code cause the application to terminate or corrupt persistent state? Verify that Promises are handled, optional chaining protects against nulls, and loops have guaranteed exit conditions.
-- **Logic & Correctness**: Does the code achieve its stated purpose without bugs? Examine boundary conditions (empty arrays, zero values), async ordering, and boolean short-circuiting.
-- **Error Handling**: Does the system degrade gracefully under failure? Look for try/catch blocks that silently ignore errors, failed network requests left unhandled, or missing validation on external data.
-- **Performance & Leaks**: Are there observable bottlenecks or resource leaks? Consider repeated queries inside loops, event listeners not cleaned up in useEffect/onUnmounted, or synchronous operations blocking the main thread.
-- **Maintainability**: Will a future developer struggle to change or test this code? Identify magic numbers without named constants, public functions lacking JSDoc, or deep coupling that prevents isolated unit testing.
-- **Readability**: Can intent be understood quickly? Flag variable names that misrepresent purpose, comments that contradict code, or functions exceeding ~50 lines without clear logical breaks.
+- **Security**: Does this change introduce vulnerabilities? Check for unsanitized input reaching interpreters (SQL, shell, OS commands), missing authorization checks, or secrets in logs/config.
+- **Crash & Data Loss**: Could this code terminate the application or corrupt state? Verify error propagation, null/None/nil safety, and loop termination conditions.
+- **Logic & Correctness**: Are there edge-case failures? Examine boundary conditions (empty collections, zero values), race conditions in concurrent/async code, and boolean short-circuiting.
+- **Error Handling**: Does it degrade gracefully? Look for swallowed exceptions, missing retry logic for idempotent operations, and lack of validation on external data.
+- **Performance & Leaks**: Are there resource bottlenecks? Identify repeated queries in loops, missing cleanup in lifecycle hooks (mount/unmount, init/destroy), or blocking I/O on critical paths.
+- **Maintainability**: Will a future developer struggle? Flag magic numbers without named constants, missing function/class documentation, and tight coupling that prevents isolated unit testing.
+- **Readability**: Can intent be understood quickly? Flag misleading variable names and functions exceeding reasonable length without clear logical breaks.
+- **Testability**: Is the change covered by tests? Flag new logic without corresponding test cases. This dimension is **mandatory** for all logic changes.
+
+#### Before Filing an Issue, Ask Internally:
+1. Is this code actually broken or risky *right now*?
+2. Could a reasonable developer disagree that this is an issue?
 
 **Silent Rules (Do NOT Report):**
 - Subjective stylistic preferences (tabs vs spaces) **unless they violate an explicit rule found in project config files.**
 - Minor naming nitpicks that do not impair clarity.
-- Suggestions with confidence below the stated threshold.
+- Issues that do not clearly meet the severity definitions above.
 
-**Confidence Calibration:**
-Before reporting any issue, internally verify:
-1. *Is this code actually broken or risky right now?* (If yes, escalate to Critical/Warning.)
-2. *Could a reasonable developer disagree that this is an issue?* (If yes, lower confidence or drop.)
+### 4. Provide Feedback
 
-### 3. Provide Feedback
+#### Output Constraints (Hard Limits)
 
-#### Output Structure
+To ensure the review is actionable and scannable:
+- **CRITICAL**: List **ALL** findings. No upper limit.
+- **WARNING**: List **up to 5** most severe findings. Prioritize by impact.
+- **SUGGESTION**: List **up to 3** most valuable improvements.
+
+If more issues exist, append a one-line note: *"(+X additional WARNINGs omitted for brevity. Ask if you want full list.)"*
+
+#### Structure
 
 **Summary**
 2–3 sentences summarizing the change intent and overall health assessment. If no issues found, state this explicitly.
 
 **Issues Found**
-*(Example format — replace with actual findings during review)*
-| Severity | File:Line | Issue | Confidence |
+| Severity | Category | File:Line | Issue |
 | :--- | :--- | :--- | :--- |
-| CRITICAL | `src/auth.ts:42` | SQL injection via raw query concatenation | 98% |
-| WARNING | `utils/api.ts:15` | Missing error catch leads to unhandled rejection | 90% |
-| SUGGESTION | `hooks/useData.ts:88` | Extract magic number `86400` to named constant | 85% |
+| CRITICAL | Security | `src/auth.ts:42` | SQL injection via raw query concatenation |
+| WARNING | Error Handling | `utils/api.ts:15` | Missing `.catch` leads to unhandled rejection |
+| SUGGESTION | Maintainability | `hooks/useData.ts:88` | Extract magic number `86400` to named constant |
 
-*If no issues meet thresholds:* `No issues meeting confidence thresholds found.`
+*If no issues meet severity definitions:* `No issues meeting reporting thresholds found.`
 
 **Detailed Findings**
 For each issue listed:
 - **File:** `path:line`
+- **Category:** The review dimension (e.g., Security, Logic)
 - **Problem:** Concise explanation of why this matters.
 - **Suggestion:** Code block or clear instruction for resolution.
 
@@ -78,9 +122,9 @@ For each issue listed:
 Select one: `APPROVE` | `APPROVE WITH SUGGESTIONS` | `NEEDS CHANGES`
 *Format: Output the verdict on a new line after the detailed findings, e.g., `VERDICT: APPROVE WITH SUGGESTIONS`.*
 
-### 4. Follow-up Interaction
+### 5. Follow-up Interaction
 If recommendation is **APPROVE WITH SUGGESTIONS** or **NEEDS CHANGES**:
-- Offer to **Generate Fix Patches** or **Explain the Context** for deeper understanding.
+- Offer to **Generate Fix Patches** (in unified diff format) or **Explain the Context** for deeper understanding.
 - If the user declines follow-up, acknowledge and end the review session.
 
 ## Tone Guidance
