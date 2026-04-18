@@ -11,9 +11,9 @@ From the perspective of a code review expert, use this skill to guide the agent 
 
 ### 1. Identify Changes
 *   Check status: `git status`
-*   Read diffs: `git diff` (working tree) and/or `git diff --staged` (staged).
-- **If no changes**: Inform the user "No local changes found to review." and stop.
-- **If changes exceed 1500 lines or 10 files**: Focus on core logic files first; group findings by module and output in batches rather than reviewing every line equally.
+*   Read diffs: `git diff` (working tree) and/or `git diff --staged` (staged). Also check untracked files with `git ls-files --others --exclude-standard`.
+- **If no changes (including untracked files)**: Inform the user "No local changes found to review." and stop.
+- **If changes exceed 1500 lines or 10 files**: Focus on core logic files first; group findings by module and output in batches (e.g., 5 files per batch) rather than reviewing every line equally.
 
 ### 2. In-Depth Analysis & Confidence Thresholds
 > Read surrounding code context for modified files to understand intent. Check project config files to align with the project's own style and rules.
@@ -59,6 +59,7 @@ Before reporting any issue, internally verify:
 2–3 sentences summarizing the change intent and overall health assessment. If no issues found, state this explicitly.
 
 **Issues Found**
+*(Example format — replace with actual findings during review)*
 | Severity | File:Line | Issue | Confidence |
 | :--- | :--- | :--- | :--- |
 | CRITICAL | `src/auth.ts:42` | SQL injection via raw query concatenation | 98% |
@@ -80,6 +81,7 @@ Select one: `APPROVE` | `APPROVE WITH SUGGESTIONS` | `NEEDS CHANGES`
 ### 4. Follow-up Interaction
 If recommendation is **APPROVE WITH SUGGESTIONS** or **NEEDS CHANGES**:
 - Offer to **Generate Fix Patches** or **Explain the Context** for deeper understanding.
+- If the user declines follow-up, acknowledge and end the review session.
 
 ## Tone Guidance
 - **CRITICAL / WARNING**: Direct, unambiguous, focused on impact. Be firm but not alarmist.
