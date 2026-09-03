@@ -1,6 +1,6 @@
 ---
 name: refactoring-coding-standard
-description: "在用户请求代码审查、重构、优化代码质量、评审代码坏味道、编写新代码时触发；支持带主题或章节号（如 ch03）按需加载对应章节。"
+description: "在用户请求代码审查、重构、优化代码质量、评审代码坏味道、编写新代码、学习或讲解重构手法时触发；支持带主题或章节号（如 ch03）按需加载对应章节。"
 ---
 
 <!-- argument-hint: [topic, framework name, or chapter number] -->
