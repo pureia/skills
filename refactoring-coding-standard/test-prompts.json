@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "审查这段代码的坏味道并给出重构建议：function calcShipping(cart) { let fee = 0; for (let i = 0; i < cart.items.length; i++) { const w = cart.items[i].weight; const q = cart.items[i].quantity; if (w > 1000) { fee += q * 20; } else { fee += q * 10; } } if (fee > 500) { fee = fee * 0.9; } return fee; }",
+    "expected": "识别循环语句/魔法数字/过长函数等坏味道；给出以管道取代循环、提炼函数、以查询取代派生变量等重构方案；分步执行并强调红条原则（先测试再重构）"
+  },
+  {
+    "id": 2,
+    "prompt": "我想学「以多态取代条件表达式」，它适合什么场景、怎么做？",
+    "expected": "定位到 ch10 主题；说明动机/做法/取舍；包含反例提醒（单一 switch 不必动、多态需要间接性代价）"
+  },
+  {
+    "id": 3,
+    "prompt": "我们项目代码里到处都是 if (user == null) return ... 这种判断，代码量很大，要不要全部改成「引入特例」？",
+    "expected": "区分卫语句与引入特例的适用场景；给出「不该改」的情形（改动频率低/YAGNI/风险大）；提醒先测试、小步走，避免过度重构"
+  }
+]
