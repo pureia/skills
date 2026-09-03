@@ -49,7 +49,7 @@
 - **合并条件表达式（Consolidate Conditional Expression）** — 多个条件同结果 | && / || 合并 | 顺序敏感的别合并
 - **以卫语句取代嵌套条件表达式（Replace Nested Conditional with Guard Clauses）** — 嵌套迷宫 | 特例取反早退 | 主线>特例才卫语句
 - **以多态取代条件表达式（Replace Conditional with Polymorphism）** — 重复 switch | 子类覆写或双分派 | 单一 switch 不必要
-- **引入特例（Introduce Special Case）** — 到处判 null/特值 | 特例类统一默认行为 | 减少条件漂泊
+- **引入特例（Introduce Special Case）** — 多处重复「同一默认值形状」的 null/特值（数量多 ≠ 判据） | 特例类统一默认行为 | 减少条件漂泊
 - **引入断言（Introduce Assertion）** — 依赖不变量 | 加 assert 说明假设 | 不做业务逻辑
 
 ## 重构 API（Ch11）— 10 项 — [ch11](chapters/ch11-refactoring-apis.md)
