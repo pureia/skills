@@ -14,7 +14,7 @@ description: "在用户请求代码审查、重构、优化代码质量、评审
 - **带章节** — 如 `ch03`：直接载入对应章节文件。
 - **浏览** — 问"有哪些章节"查看完整索引。
 
-判断口径：问题超出 [cheatsheet.md](cheatsheet.md) 的决策指南时，先读 [patterns.md](patterns.md)（61 项手法：何时用/怎么做/取舍），必要时再载入相关章节。
+判断口径：问题超出 [cheatsheet.md](cheatsheet.md) 的决策指南时，先读 [patterns.md](patterns.md)（61 项手法：何时用/怎么做/取舍），必要时再载入相关章节。用户提出流行做法（Optional/策略模式/空对象模式等）时，以 cheatsheet「流行做法 vs Fowler 立场」表为本，先判差再作答。
 
 ## 🔴 CHECKPOINT（作答纪律）
 > 以下是防自主失控的强制停点；触达任何一处必须先停，再继续。
@@ -43,7 +43,7 @@ description: "在用户请求代码审查、重构、优化代码质量、评审
 ## 文件导航
 | 文件 | 作用 |
 |---|---|
-| [cheatsheet.md](cheatsheet.md) | 决策入口：何时动手、红条规则、24 味→疗法路由、优先级序表、阈值 |
+| [cheatsheet.md](cheatsheet.md) | 决策入口：何时动手、红条规则、24 味→疗法路由、优先级序表、阈值、流行做法 vs Fowler 立场 |
 | [patterns.md](patterns.md) | 61 项重构手法：何时用 / 怎么做 / 取舍 |
 | [glossary.md](glossary.md) | 关键术语定义 |
 | [chapters/](chapters/) | ch01–ch13 章节详解，按需读取 |
