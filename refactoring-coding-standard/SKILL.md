@@ -19,6 +19,7 @@ description: "在用户请求代码审查、重构、优化代码质量、评审
 - 超出 cheatsheet → 读 [patterns.md](patterns.md) 对应条目（61 项手法：何时用/怎么做/取舍）。
 - patterns.md 不够（需动机/范例/反例细节）→ 载入对应章节（Chapter Index 定位）。
 - 三者皆无（本书外框架/模式）→ 明说"本书未覆盖"，按 Fowler 原理迁移作答，不编造章节引用。
+- 术语/概念不明（如"两顶帽子""语义距离"）→ 查 [glossary.md](glossary.md) 定义（每条附 Ch 出处）；仍不明再按上述阶梯。
 - 用户提出流行做法（Optional/策略模式/空对象模式等）→ 以 cheatsheet「流行做法 vs Fowler 立场」表为本，先判差再作答。
 
 ## 🔴 CHECKPOINT（作答纪律）
