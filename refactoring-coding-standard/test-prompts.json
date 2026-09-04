@@ -33,5 +33,20 @@
     "id": 10,
     "prompt": "Hi, the team is switching to English docs. Can you look at this TypeScript service and tell me what's wrong? class OrderService { calculateTotal(order: Order): number { let total = 0; for (const line of order.lines) { total += line.price * line.qty; if (line.qty > 10) { total *= 0.95; } } if (total > 500) { total *= 0.9; } return total; } } Also, which chapter of Refactoring should I read for this?",
     "expected": "回答语言随用户（英文或双语）；识别坏味道（循环语句→以管道取代循环 ch08、过长函数→提炼函数 ch06、魔法数字）；指出 0.95 折扣作用于累计 total 的行为疑点，先红条钉住行为再动手（新黑名单：不顺手改行为/行为变更单独成任务）；章节指引 ch08/ch06 正确不编页码；轨A ①-⑤ 结构完整；反例≥1（总金额判断可能是业务规则而非 bug）"
+  },
+  {
+    "id": 11,
+    "prompt": "这段 Java 代码要不要改：`if (order == null || order.lines == null || order.lines.isEmpty()) { return; }` —— 有人建议拆成三个卫语句 `if (order == null) return;` 那个样子。你觉得该不该改？给个判断就行，不用详细方案。",
+    "expected": "轨A 只输出 ① 判定（ch10 合并条件 vs 卫语句判据：分支少且稳定、条件语义紧凑 → 不必拆/低优先；拆三个不提升可读性），不铺开②-⑤；含 Fowler 立场反例（为风格化而拆 = 过度重构/YAGNI）；无测试套件不动手提示不喧宾夺主"
+  },
+  {
+    "id": 12,
+    "prompt": "这段代码有没有问题，要不要重构？\n```python\ndef apply_discount(price: float, discount_rate: float) -> float:\n    return price * (1 - discount_rate)\n```",
+    "expected": "轨A ① 判定\"不必改\"（无坏味道：无过长函数/无重复/无魔法数字）+ ② 已排除的味列表及排除依据（ch02 三次法则/YAGNI）；不硬造重构方案；可提示测试仍值得写（ch04）但不推动重构"
+  },
+  {
+    "id": 13,
+    "prompt": "我们有个 ShopOrder 类，800 多行，管订单校验、价格计算、库存扣减、通知客户、生成发票，还挂着支付逻辑。公司要求逐步重构但整体不能停下。帮忙看看怎么拆？",
+    "expected": "轨A：① 判定该改（过大的类 ch03/ch07）+ ② 迹象按位置列出 → 🔴 CHECKPOINT：先给方案摘要与步骤、等用户确认后再展开（大规模/跨多文件）；③ 一条排序路径（依赖顺序→风险梯度→价值/时机三轴，先行为不变小步）；④ 先红条钉行为再动；⑤ 不做清单（YAGNI/不顺手改行为/不预设插件架构）；不一次性铺全量拆分方案"
   }
 ]
