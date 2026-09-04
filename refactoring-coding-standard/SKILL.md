@@ -1,6 +1,6 @@
 ---
 name: refactoring-coding-standard
-description: "在用户请求代码审查、重构、优化代码质量、评审代码坏味道、编写新代码、学习或讲解重构手法时触发。以《重构》（第 2 版，中译本）的 24 种坏味道与 61 项重构手法为知识基座，输出坏味道判定、带排序的分步重构方案与手法讲解；支持带主题或章节号（如 ch03）按需加载对应章节。"
+description: "在用户请求代码审查、重构、优化代码质量、评审代码坏味道、编写新代码、学习或讲解重构手法时触发。以《重构》（第 2 版，中译本）的 24 种坏味道与 61 项重构手法为知识基座，输出坏味道判定、带排序的分步重构方案与手法讲解；支持带主题或章节号（如 ch03）按需加载对应章节。 Also triggers on: code review, refactoring, code-smell detection, code-quality improvement, writing new code, or learning/teaching refactoring techniques (Martin Fowler, Refactoring 2nd ed.)."
 ---
 
 <!-- argument-hint: [topic, framework name, or chapter number] -->
