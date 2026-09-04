@@ -2,7 +2,7 @@
 
 > 本技能全部 **61 项**重构手法。每项格式：**中文名（English）** — 何时用 | 怎么做 | 取舍。各分组「##」标题标注所属章节与数量，详细做法见 `chapters/ch06–ch12`。
 
-## 第一组（Ch6）— 11 项 — [ch06](chapters/ch06-first-set-of-refactorings.md)
+## 第一组（ch06）— 11 项 — [ch06](chapters/ch06-first-set-of-refactorings.md)
 - **提炼函数（Extract Function）** — 需要浏览才懂的一段代码 | 按"做什么"命名成函数，处理越界变量作参数/查询 | 短函数依赖好命名；性能罕见受损
 - **内联函数（Inline Function）** — 函数体与名字一样清晰或只剩一个调用点 | 函数体逐段替换调用点后删除 | 反向：提炼函数只用于"值得留"的函数
 - **提炼变量（Extract Variable）** — 复杂表达式/条件难读或需复用 | 无副作用后声明变量并替换 | 复用而非常量时优先提炼函数
@@ -15,7 +15,7 @@
 - **函数组合成变换（Combine Functions into Transform）** — 只读数据的多步计算 | 建变换函数逐步吸收逻辑 | 不可变数据选变换更简单
 - **拆分阶段（Split Phase）** — 一段函数做两件不相关的事 | 提炼第二阶段，用不可变中间对象沟通 | 中间结构要不可修改
 
-## 封装（Ch7）— 9 项 — [ch07](chapters/ch07-encapsulation.md)
+## 封装（ch07）— 9 项 — [ch07](chapters/ch07-encapsulation.md)
 - **封装记录（Encapsulate Record）** — 嵌套记录被到处读写 | 包成类+取值/设值函数 | 纯数据类第一步
 - **封装集合（Encapsulate Collection）** — 集合裸暴露可被任意增删 | getter 返回只读视图 + add/remove 方法 | 永远不返回内部集合引用
 - **以对象取代基本类型（Replace Primitive with Object）** — 领域值裸用基本类型 | 建值对象，行为迁入 | 显示/换算逻辑随之聚拢
@@ -26,7 +26,7 @@
 - **移除中间人（Remove Middle Man）** — 一半接口都是转发 | 客户端直连被委托对象 | 用嗅觉平衡隐藏/移除
 - **替换算法（Substitute Algorithm）** — 换个更清晰的实现 | 新旧并存对比输出后删除 | 别一步重写
 
-## 搬移特性（Ch8）— 9 项 — [ch08](chapters/ch08-moving-features.md)
+## 搬移特性（ch08）— 9 项 — [ch08](chapters/ch08-moving-features.md)
 - **搬移函数（Move Function）** — 函数放错了宿主 | 搬到"拥有最多所用数据"的模块，委托转发过渡 | 跨模块注意私有可见性
 - **搬移字段（Move Field）** — 字段总与别处数据一起变 | 先搬字段再搬使用函数 | 新宿主建字段渐进迁移
 - **搬移语句到函数（Move Statements into Function）** — 语句应属被调函数 | 汇集后移植进函数 | 消除重复
@@ -37,14 +37,14 @@
 - **以管道取代循环（Replace Loop with Pipeline）** — 循环看不清数据处理 | filter/map 逐步替代 | 意图立刻可见
 - **移除死代码（Remove Dead Code）** — 无调用者的代码 | 清理引用（含注释/反射）后删除 | 版本控制已留档
 
-## 重新组织数据（Ch9）— 5 项 — [ch09](chapters/ch09-organizing-data.md)
+## 重新组织数据（ch09）— 5 项 — [ch09](chapters/ch09-organizing-data.md)
 - **拆分变量（Split Variable）** — 一个变量承载多种含义 | 每含义一变量 | 累加器/循环变量例外
 - **字段改名（Rename Field）** — 字段名过时 | 内部直接改；公开用迁移转发 | 改名传播成本可控
 - **以查询取代派生变量（Replace Derived Variable with Query）** — 派生数据被缓存 | 删除更新路径，实时计算 | 性能敏感可复核缓存
 - **将引用对象改为值对象（Change Reference to Value）** — 小对象被多处内部引用 | 设值改为整体替换+equals/hashCode | 更新=new 最稳
 - **将值对象改为引用对象（Change Value to Reference）** — 大对象需共享身份/缓存 | 建仓储按 ID 取实例 | 克隆与身份矛盾时用引用
 
-## 简化条件逻辑（Ch10）— 6 项 — [ch10](chapters/ch10-simplifying-conditional-logic.md)
+## 简化条件逻辑（ch10）— 6 项 — [ch10](chapters/ch10-simplifying-conditional-logic.md)
 - **分解条件表达式（Decompose Conditional）** — 条件与分支体太长 | 条件与分支各成函数 | 意图先行
 - **合并条件表达式（Consolidate Conditional Expression）** — 多个条件同结果 | && / || 合并 | 顺序敏感的别合并
 - **以卫语句取代嵌套条件表达式（Replace Nested Conditional with Guard Clauses）** — 嵌套迷宫 | 特例取反早退 | 主线>特例才卫语句
@@ -52,7 +52,7 @@
 - **引入特例（Introduce Special Case）** — 多处重复「同一默认值形状」的 null/特值（数量多 ≠ 判据） | 特例类统一默认行为 | 减少条件漂泊
 - **引入断言（Introduce Assertion）** — 依赖不变量 | 加 assert 说明假设 | 不做业务逻辑
 
-## 重构 API（Ch11）— 10 项 — [ch11](chapters/ch11-refactoring-apis.md)
+## 重构 API（ch11）— 10 项 — [ch11](chapters/ch11-refactoring-apis.md)
 - **将查询函数和修改函数分离（Separate Query from Modifier）** — 函数又查又改 | 复制出查询，副作用收进修改 | 调用者不会被意外污染
 - **函数参数化（Parameterize Function）** — 两函数只差字面量 | 合并成带参函数 | 行为模式不同别硬合并
 - **移除标记参数（Remove Flag Argument）** — 参数只选路径 | 拆成具名函数 | 调用点自解释
@@ -64,7 +64,7 @@
 - **以命令取代函数（Replace Function with Command）** — 函数太长/参数太多 | 建类分步执行 | 复杂算法收纳盒
 - **以函数取代命令（Replace Command with Function）** — 命令只剩一个方法 | 折叠为普通函数 | 过度结构要拆
 
-## 处理继承关系（Ch12）— 11 项 — [ch12](chapters/ch12-dealing-with-inheritance.md)
+## 处理继承关系（ch12）— 11 项 — [ch12](chapters/ch12-dealing-with-inheritance.md)
 - **函数上移（Pull Up Method）** — 子类相同函数 | 移到超类 | 细节差异用模板方法
 - **字段上移（Pull Up Field）** — 子类相同字段 | 移超类 | 构造参数直达
 - **构造函数本体上移（Pull Up Constructor Body）** — 子类构造公共段 | 上移+参数对象 | 减少重复
