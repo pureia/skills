@@ -28,5 +28,10 @@
     "id": 6,
     "prompt": "我们项目控制台里有一堆命令式的 for/if 循环处理用户操作日志，我想整套换成 RxJS 的流式处理，Fowler 的《重构》怎么看待这种改法？",
     "expected": "明说「本书未覆盖」RxJS，不编造章节引用；按 Fowler 原理迁移作答：机制翻译（以管道取代循环 Ch8 → from/filter/map/reduce/tap）；轨B四段；反例≥1条（YAGNI/整套换不是重构/不顺手加防抖重试吞异常）；小步+红条+行为不变"
+  },
+  {
+    "id": 10,
+    "prompt": "Hi, the team is switching to English docs. Can you look at this TypeScript service and tell me what's wrong? class OrderService { calculateTotal(order: Order): number { let total = 0; for (const line of order.lines) { total += line.price * line.qty; if (line.qty > 10) { total *= 0.95; } } if (total > 500) { total *= 0.9; } return total; } } Also, which chapter of Refactoring should I read for this?",
+    "expected": "回答语言随用户（英文或双语）；识别坏味道（循环语句→以管道取代循环 Ch8、过长函数→提炼函数 Ch6、魔法数字）；指出 0.95 折扣作用于累计 total 的行为疑点，先红条钉住行为再动手（新黑名单：不顺手改行为/行为变更单独成任务）；章节指引 ch08/ch06 正确不编页码；轨A ①-⑤ 结构完整；反例≥1（总金额判断可能是业务规则而非 bug）"
   }
 ]
