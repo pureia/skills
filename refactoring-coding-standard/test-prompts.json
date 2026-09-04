@@ -18,5 +18,15 @@
     "id": 4,
     "prompt": "我们项目有完整的测试套件，这段代码坏味道很明显，直接帮我改：function findPrice(order) { var price = 0; for (var i = 0; i < order.lines.length; i++) { var p = order.lines[i].price * order.lines[i].qty; if (order.lines[i].qty > 10) { p = p * 0.95; } price = price + p; } return price; }",
     "expected": "按「动手改」子流程：先跑基线测试；最小步重构（以管道取代循环/提炼函数/魔法数字命名）；每步验证+提交；收尾按轨A给出过去式执行记录；不越界改用户没让改的"
+  },
+  {
+    "id": 5,
+    "prompt": "我们有完整的测试套件。这个方法 `calculateOrder(firstName, lastName, email, phone, address, birthDate): number` 是我们的公共 API，6 个 String 参数太长，我想重构成参数对象，但公司规定公共 API 的签名不能改。你帮我看看怎么处理。",
+    "expected": "按轨A①-⑤：判定过长参数列表(ch03)；硬约束（公共签名不能改）与主流疗法（引入参数对象/保持对象完整，均须触碰签名）冲突→🔴列冲突点请用户裁定，不自行取舍；违反硬约束的疗法标「已排除（原因）」；方案含新旧并存（薄壳转发）+渐进迁移；先红条边界测试；未做清单（YAGNI/不顺手改行为）"
+  },
+  {
+    "id": 6,
+    "prompt": "我们项目控制台里有一堆命令式的 for/if 循环处理用户操作日志，我想整套换成 RxJS 的流式处理，Fowler 的《重构》怎么看待这种改法？",
+    "expected": "明说「本书未覆盖」RxJS，不编造章节引用；按 Fowler 原理迁移作答：机制翻译（以管道取代循环 Ch8 → from/filter/map/reduce/tap）；轨B四段；反例≥1条（YAGNI/整套换不是重构/不顺手加防抖重试吞异常）；小步+红条+行为不变"
   }
 ]
