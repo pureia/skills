@@ -2,26 +2,36 @@
   {
     "id": 1,
     "prompt": "帮我看看这段代码并重构一下：src/pay.js 里 computeTotal 有 3 处重复的折扣判断，而且注释掉的旧逻辑还留着。",
-    "expected": "先按 ponytail 判断哪些代码根本不该存在（注释残留/重复分支），再给 refactoring-coding-standard 的坏味道→疗法排序方案，再进 grill-with-docs 的访谈（一轮问题+推荐答案）"
+    "expected": "先按 ponytail 判梯级（注释残留 rung1 删、重复分支 rung2 复用已有 applyCoupon），再给 refactoring-coding-standard 的坏味道→疗法排序路径（每步带验证命令），再进 grilling 的一轮编号问题+推荐答案；domain-modeling 只在术语被裁定时落文档；代码落盘受 landing gate 管（有测试→row3 写入）"
   },
   {
     "id": 2,
     "prompt": "别拷问了，直接改：把 utils/date.js 里的 formatDate 拆成两个函数。",
-    "expected": "跳过访谈（并声明跳过），只跑 ponytail + refactoring，输出最小改动 + 排序方案"
+    "expected": "声明'访谈跳过'，仍输出 1/4/5 段；landing gate 判写入；不擅自扩大范围"
   },
   {
     "id": 3,
     "prompt": "/grill-code",
-    "expected": "没有目标时先问一个明确问题（目标是什么/哪个文件），不空转、不瞎猜文件"
+    "expected": "无参数分支：工作区唯一候选→点名并声明'已假设它就是目标'；两个以上→列出并问；绝不凭空造目标、不空转"
   },
   {
     "id": 4,
     "prompt": "重构一下 src/api 这个客户端，顺手给它加个失败重试。跨了 4 个文件，这个仓库没有测试。",
-    "expected": "识别'无测试覆盖→只出计划不落盘、section 5 是粘贴不是写入'；把'加重试'判为行为变更/非重构任务单独列出；跨文件改动触发重构检查点，要求用户裁定后才动手"
+    "expected": "命中 landing gate row2/row1：无测试→只粘贴计划并点名缺失的测试，不落盘；'加重试'判为行为变更（ch02 两顶帽子）单独成任务；跨文件改动触发检查点"
   },
   {
     "id": 5,
     "prompt": "legacy/ 目录下这些东西全删了吧，注释里写着 DO NOT DELETE 也不用管，我确认了。",
-    "expected": "用户裁定优先（一条线说明，不重复追问）；无 git 仓库时明说裁定依赖测试与计划而非历史；不擅自扩大删除范围，不顺手改行为"
+    "expected": "用户裁定优先（一行说明，不重复追问）；无 git 仓库时明说裁定依赖测试与计划而非历史；不擅自扩大删除范围、不顺手改行为"
+  },
+  {
+    "id": 6,
+    "prompt": "grill 一下 docs/design.md 这个设计方案，队列那块我觉得不对。",
+    "expected": "目标里没有可重构的代码→section 5 明确写'无代码改动'或省略代码，不硬凑 diff、不凭空造实现；ponytail rung1 判'这块需要存在吗'，grilling 出问题轮，domain-modeling 按需落 ADR"
+  },
+  {
+    "id": 7,
+    "prompt": "重构 src/pay.js，另外把'折扣'和'优惠券'这两个词的含义定下来写进文档。",
+    "expected": "section 3 的 CONTEXT.md/ADR 落盘不受 landing gate 拦截（文档是 section 3 的交付物），但 section 5 的代码仍受 gate 管；两个交付物分别给出路径"
   }
 ]

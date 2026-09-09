@@ -21,7 +21,9 @@ carry each skill's instructions forward.
 2. `refactoring-coding-standard` — smells to refactorings. Out: one ordered
    refactor path, each step with its verification, plus what you excluded.
 3. `grilling` — grill the design. Out: one round of numbered questions, each
-   with a recommended answer.
+   with a recommended answer; the round covers every axis the target has —
+   need-to-exist, failure and atomicity, ordering, scale and backpressure,
+   rollback — and names any axis it skipped.
 4. `domain-modeling` — the docs the answers settle. Out: the CONTEXT.md / ADR
    writes, or "none" plus the one-line reason nothing was writable yet.
 
@@ -60,10 +62,14 @@ First matching row wins; section 4 says so when section 5 is a paste.
 
 | Situation | Section 5 |
 |---|---|
+| no code in the target (design doc, prose, config, or a question) | no implementation: at most a ≤10-line patch to the target's own text, or one line saying no change is needed |
 | public API, multi-file, or wide scope | paste the plan until the user confirms the summary |
 | no test covers the target | paste and name the missing test; the user asked to change the code anyway → write that test first, then land |
 | section 2 answered, or the user said "just build it" — one file, no public-API change | write |
 | otherwise (section 2 unanswered) | paste; the questions are the deliverable |
+
+Section 3's docs writes (CONTEXT.md, docs/adr/*.md) are step 4's deliverable,
+not code: this gate governs section 5 only.
 
 No git and no backup outside the repo → the paste is the rollback; say so.
 
@@ -96,7 +102,8 @@ user answered or re-interview what the code settles.
 
 - Do not call the wrappers with the Skill tool — user-only, refused.
 - Do not invent a target: with no candidate in the workspace, no refactor.
-- Do not edit files outside the landing gate.
+- Do not edit code outside the landing gate; section 3's docs writes are the one
+  exception.
 - Do not silently drop a step: one line naming the reason.
 - Do not pad the sections with prose or a skills tour.
 - Do not open chapters while the cheatsheet can decide the smell.
