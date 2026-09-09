@@ -62,7 +62,7 @@ First matching row wins; section 4 says so when section 5 is a paste.
 
 | Situation | Section 5 |
 |---|---|
-| no code in the target (design doc, prose, config, or a question) | one line: no code changes here; the minimal shape in ≤10 lines at most, never an implementation the user did not ask for |
+| no code in the target (design doc, prose, config, or a question) | no implementation: at most a ≤10-line patch to the target's own text, or one line saying no change is needed |
 | public API, multi-file, or wide scope | paste the plan until the user confirms the summary |
 | no test covers the target | paste and name the missing test; the user asked to change the code anyway → write that test first, then land |
 | section 2 answered, or the user said "just build it" — one file, no public-API change | write |
