@@ -21,7 +21,9 @@ carry each skill's instructions forward.
 2. `refactoring-coding-standard` — smells to refactorings. Out: one ordered
    refactor path, each step with its verification, plus what you excluded.
 3. `grilling` — grill the design. Out: one round of numbered questions, each
-   with a recommended answer.
+   with a recommended answer; the round covers every axis the target has —
+   need-to-exist, failure and atomicity, ordering, scale and backpressure,
+   rollback — and names any axis it skipped.
 4. `domain-modeling` — the docs the answers settle. Out: the CONTEXT.md / ADR
    writes, or "none" plus the one-line reason nothing was writable yet.
 
