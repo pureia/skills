@@ -51,7 +51,10 @@ For example:
 
 Headings exactly as above; body in the user's language. Section 1 rows cite
 `file:line` and the rung; section 4 steps end with the exact command that
-proves them (`npm test`, not "tests pass"). Sections 1-4 are bullets and
+proves them (`npm test`, not "tests pass"). A step that claims the behavior
+is unchanged proves it with a differential run or by naming the inputs it
+preserves — the existing suite passing is not that proof when the suite
+asserts the bad behavior as correct. Sections 1-4 are bullets and
 tables, never paragraphs. Section 5 is the only place with code, code before
 its three lines of explanation. "just build it": skip section 2, state
 "interview skipped", still emit 1, 4, 5.
