@@ -39,7 +39,17 @@ In this order, no prose between sections:
 ## 5. Code            — the lazy version, smallest diff
 ```
 
-Sections 1-4 are bullets and tables, never paragraphs. Section 5 is the only
+For example:
+
+```
+| src/pay.js:10-12 dead comment | delete | rung 1: no git here, the "rollback" it protects does not exist |
+1. 同体分支 → 合并条件表达式 ch10 → `npm test` 5/5
+```
+
+Headings exactly as above; body in the user's language. Section 1 rows cite
+`file:line` and the rung; section 4 steps end with the exact command that
+proves them (`npm test`, not "tests pass"). Sections 1-4 are bullets and
+tables, never paragraphs. Section 5 is the only
 place with code, code before its three lines of explanation. When the
 refactoring checkpoint blocks edits (no test suite, public API, multi-file),
 section 5 is a paste, not a write, and section 4 says so. "just build it":
