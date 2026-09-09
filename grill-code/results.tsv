@@ -10,3 +10,9 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-09-09T10:20	4d8a09e	grill-code	-	3-0 better	keep	dim3	失败表 2列4行→3列6行(触发/一线修复/仍失败兜底)+新增'无参数'与'成员技能加载失败'分支;K1/K3(正向标注)/K2(反向标注)全 clear 同指 dim3/dim5/dim8	paired
 2026-09-09T10:40	4e6a379	grill-code	-	2-0-1 better	keep	dim7	加载指令去歧义+Do-not 与失败表对齐(消除R2引入的自相矛盾);L1 tie(slight)/L2/L3 better(slight);HL-4 触顶信号=多数 slight	paired
 2026-09-09T10:55	4e6a379	grill-code	-	-	validated	dim8	R3 后 full_test 复测:T1 命中 R1 新规则(每行 file:line+rung、验证列写 `npm test`、中文正文);T3(无参数)命中 R2 新分支——点名唯一候选并声明'已假设它就是目标';两次均零落盘、检查点全守	full_test
+2026-09-09T10:02	50fea89	grill-code	-	83.3	baseline	-	Phase1基线(本轮):结构dims1-7,9=9/8/8/8/8/8/8/9(加权62.6)+dim8=9.0;T1-T5 九子agent with/without(独立隔离副本,空目录非git,零污染);T4关键对照:with-skill 只粘贴+18→30行最小方案 vs baseline 18→182行+2新模块;红灯扫描0命中 runtime_warn=0	full_test
+2026-09-09T10:18	b45e9e7	grill-code	-	3-0 better	keep	dim3	新增 Landing gate 四行表:收编四处互相矛盾的落盘门禁+补回 refactoring「用户要求直接改→先补测试再落盘」例外;J1 clear/J2 clear/J3 slight(盲评路径打乱顺序);T2/T4 复测无回归	paired
+2026-09-09T10:33	c86cfc3	grill-code	-	3-0 better	keep	dim2/dim7	门表加「first matching row wins」+最严行前置+no-git 由门禁降级为提示(消除 T4 同时命中两行);J1 slight/J2 slight/J3 clear;复测:T2 命中 row3 落盘、T4 命中 row1 粘贴	paired
+2026-09-09T10:48	20ca855	grill-code	-	3-0 better	keep	dim5/dim6	梯级改为 ponytail 真实 7 级编号(原 4 项摘要漏 rung4-7 且把 delete 当 rung)、section1 契约含 keep、新增「目标是被粘贴的 diff」分支;J1 slight/J2 clear/J3 slight;T6 探针实测命中新分支	paired
+2026-09-09T10:52	5138dd1	grill-code	-	-	validated	dim8	最终态复测:T2 落盘(npm test 绿)、T4 粘贴(命中 row1)、T6 粘贴目标新分支(引用 paste:<行号>,未误搜文件系统);3/3 命中预期门禁行,dry_run=0	full_test
+2026-09-09T10:55	5138dd1	grill-code	83.3	90.0	baseline	-	Phase3终评(triage):dims1-9 全 9(结构加权69.3+dim8 20.7);HL-4 触发(R2/R3 连续两轮多数 slight)→收工;绝对分仅 triage,keep/revert 全走 paired 3-0	paired
