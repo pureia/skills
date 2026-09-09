@@ -60,10 +60,14 @@ First matching row wins; section 4 says so when section 5 is a paste.
 
 | Situation | Section 5 |
 |---|---|
+| no code in the target (design doc, prose, config, or a question) | one line: no code changes here; the minimal shape in ≤10 lines at most, never an implementation the user did not ask for |
 | public API, multi-file, or wide scope | paste the plan until the user confirms the summary |
 | no test covers the target | paste and name the missing test; the user asked to change the code anyway → write that test first, then land |
 | section 2 answered, or the user said "just build it" — one file, no public-API change | write |
 | otherwise (section 2 unanswered) | paste; the questions are the deliverable |
+
+Section 3's docs writes (CONTEXT.md, docs/adr/*.md) are step 4's deliverable,
+not code: this gate governs section 5 only.
 
 No git and no backup outside the repo → the paste is the rollback; say so.
 
@@ -96,7 +100,8 @@ user answered or re-interview what the code settles.
 
 - Do not call the wrappers with the Skill tool — user-only, refused.
 - Do not invent a target: with no candidate in the workspace, no refactor.
-- Do not edit files outside the landing gate.
+- Do not edit code outside the landing gate; section 3's docs writes are the one
+  exception.
 - Do not silently drop a step: one line naming the reason.
 - Do not pad the sections with prose or a skills tour.
 - Do not open chapters while the cheatsheet can decide the smell.
