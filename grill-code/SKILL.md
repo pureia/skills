@@ -3,7 +3,8 @@ name: grill-code
 description: >
   One-shot code workflow: grill the design, document the domain, force the
   laziest refactoring that still works. Use when the user says "grill-code",
-  "grill the code", "challenge and refactor this", or "review and simplify".
+  "grill the code", "code grill", "challenge and refactor this", or "review
+  and simplify".
 disable-model-invocation: true
 argument-hint: "[target: file, module, diff, or design]"
 ---
@@ -25,7 +26,8 @@ forward — later skills stack on earlier ones.
 4. `domain-modeling` — write the docs the answers settle. Out: the CONTEXT.md
    / ADR writes, or "none" plus the one-line reason nothing was writable yet.
 
-Pass the user's arguments through; ponytail also takes `lite|full|ultra`.
+Pass the user's arguments through (`/grill-code <target>` → the same target);
+ponytail also takes `lite|full|ultra`.
 
 ## Output
 
@@ -54,6 +56,13 @@ so. "just build it": skip section 2, state "interview skipped", still emit
 | the target is not in the workspace | say which path you searched, ask for the path or pasted source |
 | a comment says "do not delete", the user says delete | user ruling wins; one line, git keeps the history |
 | no test covers the target | plan only, no file edits |
+
+## Conflicts
+
+User ruling wins. Otherwise precedence is ponytail (what should exist) →
+grilling/domain-modeling (what the design should be) → refactoring (how to
+get there). Name the conflict and the ruling, one line each. Never re-ask what
+the user answered or re-interview what the code already settles.
 
 ## Checkpoints
 
