@@ -15,8 +15,9 @@ carry each skill's instructions forward.
 
 ## Steps
 
-1. `ponytail` — what may exist. Out: the ladder ruling per piece (exists /
-   reuse / stdlib / delete).
+1. `ponytail` — what may exist. Out: the ladder ruling per piece, cited by
+   rung number (1 need to exist / 2 reuse / 3 stdlib / 4 native / 5 installed
+   dep / 6 one line / 7 minimum code).
 2. `refactoring-coding-standard` — smells to refactorings. Out: one ordered
    refactor path, each step with its verification, plus what you excluded.
 3. `grilling` — grill the design. Out: one round of numbered questions, each
@@ -32,7 +33,7 @@ ponytail also takes `lite|full|ultra`.
 In this order, no prose between sections:
 
 ```
-## 1. Grill verdict   — what should not exist; one ruling per item
+## 1. Grill verdict   — one ruling per piece: delete or keep
 ## 2. Design questions — Q1..Qn, each with "➡️ <recommended answer>"
 ## 3. Docs            — files written (CONTEXT.md / ADR path), or "none"
 ## 4. Refactor plan   — ordered steps: smell → therapy → verification
@@ -72,6 +73,7 @@ No git and no backup outside the repo → the paste is the rollback; say so.
 |---|---|---|
 | no argument | exactly one candidate in the workspace → name it in section 1 and say you assumed it; two or more → list them and ask | ask for the path or the pasted source; never invent a target |
 | the target is not in the workspace | say which paths you searched | ask for the path or the pasted source |
+| the target is pasted (diff, design, snippet), not on disk | work from the paste; cite it as `paste:<line>` | ask for the path only if a ruling needs code the paste does not show |
 | a member skill will not load | run that step from its contract, one line, marked `(not loaded)` | name the step that is missing; never skip it silently |
 | a wrapper (`grill-code`, `grill-with-docs`, `grill-me`) refused | user-only: load `grilling` then `domain-modeling`; never ask for a slash command | — |
 | a comment says "do not delete", the user says delete | user ruling wins; one line | no git repo → say so; the ruling rests on the tests and the plan, not on history |
