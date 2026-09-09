@@ -10,8 +10,8 @@ argument-hint: "[target: file, module, diff, or design]"
 
 # Grill Code
 
-Call the Skill tool once per skill, in order; carry each skill's
-instructions forward.
+Load these four member skills with the Skill tool, once each, in order;
+carry each skill's instructions forward.
 
 ## Steps
 
@@ -83,7 +83,7 @@ user answered or re-interview what the code settles.
 ## Do not
 
 - Do not call the wrappers with the Skill tool — user-only, refused.
-- Do not invent a target: no file, no refactor.
+- Do not invent a target: with no candidate in the workspace, no refactor.
 - Do not edit files before section 2 is answered, or when no test covers it.
 - Do not silently drop a step: one line naming the reason.
 - Do not pad the sections with prose or a skills tour.

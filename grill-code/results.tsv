@@ -7,3 +7,4 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-09-09T02:30	483351d	grill-code	-	-	validated	实测表现(dim8)	最终态 T1 复测 full_test：5 段模板逐段命中、链式加载 ponytail→refactoring→grilling→domain-modeling 全部成功、🔴/🛑/Do-not/失败表逐条被逐字引用并落地（零'grill-with-docs 被拒'故障）；dim8 6→9	full_test
 2026-09-09T09:55	571ee78	grill-code	-	79.9	baseline	-	Phase1基线:结构dims1-7,9=8/8/7/8/7/8/8/9(加权59.2)+dim8=9.0;T1/T2 with-skill 3/3胜baseline(独立隔离副本,首跑共用fixture污染作废);T3 baseline 因 runtime 对 /grill-code 自动注入 skill 无法测;红灯扫描0命中 runtime_warn=0	full_test
 2026-09-09T10:05	b13e5ad	grill-code	-	3-0 better	keep	dim5	Output 加两行填充示例+语言/行号/命令级验证规则;J1/J2(反向标注)/J3 全 clear 同指 dim5/dim8,+391B 零冗余	paired
+2026-09-09T10:20	4d8a09e	grill-code	-	3-0 better	keep	dim3	失败表 2列4行→3列6行(触发/一线修复/仍失败兜底)+新增'无参数'与'成员技能加载失败'分支;K1/K3(正向标注)/K2(反向标注)全 clear 同指 dim3/dim5/dim8	paired
