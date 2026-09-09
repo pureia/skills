@@ -8,3 +8,5 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-09-09T09:55	571ee78	grill-code	-	79.9	baseline	-	Phase1基线:结构dims1-7,9=8/8/7/8/7/8/8/9(加权59.2)+dim8=9.0;T1/T2 with-skill 3/3胜baseline(独立隔离副本,首跑共用fixture污染作废);T3 baseline 因 runtime 对 /grill-code 自动注入 skill 无法测;红灯扫描0命中 runtime_warn=0	full_test
 2026-09-09T10:05	b13e5ad	grill-code	-	3-0 better	keep	dim5	Output 加两行填充示例+语言/行号/命令级验证规则;J1/J2(反向标注)/J3 全 clear 同指 dim5/dim8,+391B 零冗余	paired
 2026-09-09T10:20	4d8a09e	grill-code	-	3-0 better	keep	dim3	失败表 2列4行→3列6行(触发/一线修复/仍失败兜底)+新增'无参数'与'成员技能加载失败'分支;K1/K3(正向标注)/K2(反向标注)全 clear 同指 dim3/dim5/dim8	paired
+2026-09-09T10:40	4e6a379	grill-code	-	2-0-1 better	keep	dim7	加载指令去歧义+Do-not 与失败表对齐(消除R2引入的自相矛盾);L1 tie(slight)/L2/L3 better(slight);HL-4 触顶信号=多数 slight	paired
+2026-09-09T10:55	4e6a379	grill-code	-	-	validated	dim8	R3 后 full_test 复测:T1 命中 R1 新规则(每行 file:line+rung、验证列写 `npm test`、中文正文);T3(无参数)命中 R2 新分支——点名唯一候选并声明'已假设它就是目标';两次均零落盘、检查点全守	full_test
