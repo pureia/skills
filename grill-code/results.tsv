@@ -25,3 +25,5 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-09-09T17:58	5c1521d	grill-code	-	82.8	baseline	-	Phase1基线(第3轮):结构dims1-7,9=8/8/8/8/8/8/8/8(加权64.2)+dim8=7.0;3个隔离探针(with/without/trigger,零污染);红灯扫描0命中 runtime_warn=0	full_test
 2026-09-09T17:58	5c1521d	grill-code	-	-	probe	-	PA小目标对照(slug.js静默吞CJK→空串):with-skill 抓到契约风险+五轴覆盖+CONTEXT.md落盘,但声称'行为逐字符等价'未验证且误改参数名(text→title,用户未答Q2);baseline 抓到同一风险且更硬(28输入差分表+||吞0+下划线粘连)	dry_run
 2026-09-09T17:58	5c1521d	grill-code	-	-	probe	-	PB触发词覆盖:中文'帮我grill一下这个仓库的代码,看看哪里能简化'→invoked,但judge自报为跨语种inference;frontmatter触发词全英文,无声明式中文触发词	dry_run
+2026-09-09T18:05	af88aa3	grill-code	-	3-0 better	keep	dim8	R1 section4 新增等价性自证契约(差分run/点名保留输入;既有套件把坏行为断言成绿时不算证明);J1 clear/J2 clear/J3 slight 三判独立同指该句为唯一差异且命中实测失败;+113字符	paired
+2026-09-09T18:05	af88aa3	grill-code	-	-	validated	dim8	R1 后同fixture复测:agent 主动跑54输入差分、自报'套件通过≠行为保持'、保留 text 不擅自改名、改用保下划线行为的变体;命中 gate row2 粘贴零落盘→dim8 7→9	full_test
