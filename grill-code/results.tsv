@@ -31,3 +31,4 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-09-09T18:12	f7b1cd8	grill-code	-	-	validated	dim3	R2 后同fixture复测:section4 出现独立'非重构问题'块(2条)+末行'本方案不含…单独成任务'、Q1/Q2 均标注不混入重构;38输入差分 diffs=0、无改名、命中 row5 粘贴零落盘	full_test
 2026-09-09T18:20	91f0104	grill-code	-	3-0 better	keep	dim5	R3 Output 契约新增'无测试覆盖→第一步=钉住现状的边界值测试、先见红再落地'(成员技能模板④义务落地);M1 clear/M2 slight/M3 clear 三判同指该句为唯一差异;+161字符	paired
 2026-09-09T18:20	91f0104	grill-code	-	92.6	baseline	-	Phase3终评(triage):dims1-9=8/8/9/9/9/8/9/9/9(加权71.9)+dim8=9.0→92.6,较基线82.8 +9.8;3轮 paired 全 keep(R1 3-0/R2 3-0/R3 3-0);绝对分仅 triage	paired
+2026-09-09T18:28	91f0104	grill-code	-	-	validated	dim5	R3 后无测试覆盖场景复测(notestfix):section4 第一步=25 例边界值钉住测试、并实测'先见红'(朴素两正则版 5 条红后回退)、落地后 25/25 绿 + 20013 输入差分 0 diff、命中 gate row3 落盘且回滚粘贴随行;CJK/0 falsy 风险独立标注不静默	full_test
