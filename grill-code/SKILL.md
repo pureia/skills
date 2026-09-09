@@ -17,9 +17,14 @@ Carry every skill's instructions forward — later skills stack on earlier ones.
 
 ## Steps
 
-1. `ponytail` — set the bar for what is allowed to exist.
-2. `refactoring-coding-standard` — route smells to refactorings.
+1. `ponytail` — set the bar for what is allowed to exist. Out: the ladder
+   ruling on each proposed piece of code (exists / reuse / stdlib / delete).
+2. `refactoring-coding-standard` — route smells to refactorings. Out: one
+   ordered refactor path, each step with its verification, plus the therapies
+   you excluded and why.
 3. `grill-with-docs` — grill the design, then write the docs it produces.
+   Out: one round of numbered questions with a recommended answer each, then
+   the CONTEXT.md / ADR writes once the user answers.
 
 Pass the user's arguments through with each call (`/grill-code <target>` →
 the same target; ponytail also takes `lite|full|ultra`).
@@ -39,7 +44,19 @@ the same target; ponytail also takes `lite|full|ultra`).
   refactoring to the answers. Do not re-interview what the user already said.
 - The refactoring skill's cheatsheet is the entry point; open chapters only
   when the cheatsheet cannot decide the smell.
-- Output: grill verdict → docs written → ordered refactor plan → the lazy
-  version of the code. Code first, three lines of explanation at most.
+- The refactor path is a plan, not an edit: apply the ponytail ruling and the
+  refactoring plan to the code only after the design questions are answered.
+- Output shape, in this order, no prose between sections:
+
+```
+## 1. Grill verdict        — what should not exist; the one ruling per item
+## 2. Design questions      — Q1..Qn, each with "➡️ <recommended answer>"
+## 3. Docs                 — files written (CONTEXT.md / ADR path), or "none"
+## 4. Refactor plan        — ordered steps: smell → therapy → verification
+## 5. Code                 — the lazy version, smallest diff
+```
+
+  Sections 1-4 are bullets and tables, never paragraphs. Section 5 is the
+  only place with code. Three lines of explanation max after the code.
 - "just build it" / no time to grill: skip step 3's interview, run ponytail
   plus refactoring, and say the interview was skipped.

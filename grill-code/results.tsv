@@ -1,0 +1,2 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-09-09T00:00	b048760	grill-code	-	-	baseline	-	Phase1基线：结构dims1-7,9=7/6/5/3/7/9/8/4(加权64.6)+dim8实测6子agent(with/without×T1-T3) pending	dry_run

@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我看看这段代码并重构一下：src/pay.js 里 computeTotal 有 3 处重复的折扣判断，而且注释掉的旧逻辑还留着。",
+    "expected": "先按 ponytail 判断哪些代码根本不该存在（注释残留/重复分支），再给 refactoring-coding-standard 的坏味道→疗法排序方案，再进 grill-with-docs 的访谈（一轮问题+推荐答案）"
+  },
+  {
+    "id": 2,
+    "prompt": "别拷问了，直接改：把 utils/date.js 里的 formatDate 拆成两个函数。",
+    "expected": "跳过访谈（并声明跳过），只跑 ponytail + refactoring，输出最小改动 + 排序方案"
+  },
+  {
+    "id": 3,
+    "prompt": "/grill-code",
+    "expected": "没有目标时先问一个明确问题（目标是什么/哪个文件），不空转、不瞎猜文件"
+  }
+]
