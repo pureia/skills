@@ -57,12 +57,14 @@ skip section 2, state "interview skipped", still emit 1, 4, 5.
 
 ## If X fails → do Y
 
-| X | Y |
-|---|---|
-| a wrapper (`grill-code`, `grill-with-docs`, `grill-me`) refused | user-only: load `grilling` then `domain-modeling`; never ask for a slash command |
-| the target is not in the workspace | say which path you searched, ask for the path or pasted source |
-| a comment says "do not delete", the user says delete | user ruling wins; one line, git keeps the history |
-| no test covers the target | plan only, no file edits |
+| Trigger | First fix | Still stuck |
+|---|---|---|
+| no argument | exactly one candidate in the workspace → name it in section 1 and say you assumed it; two or more → list them and ask | ask for the path or the pasted source; never invent a target |
+| the target is not in the workspace | say which paths you searched | ask for the path or the pasted source |
+| a member skill will not load | run that step from its contract, one line, marked `(not loaded)` | name the step that is missing; never skip it silently |
+| a wrapper (`grill-code`, `grill-with-docs`, `grill-me`) refused | user-only: load `grilling` then `domain-modeling`; never ask for a slash command | — |
+| a comment says "do not delete", the user says delete | user ruling wins; one line | no git repo → say so; the ruling rests on the tests and the plan, not on history |
+| no test covers the target | plan only, no file edits | paste section 5 and name the missing test |
 
 ## Conflicts
 
