@@ -19,7 +19,9 @@ carry each skill's instructions forward.
    rung number (1 need to exist / 2 reuse / 3 stdlib / 4 native / 5 installed
    dep / 6 one line / 7 minimum code).
 2. `refactoring-coding-standard` — smells to refactorings. Out: one ordered
-   refactor path, each step with its verification, plus what you excluded.
+   refactor path, each step with its verification, what you excluded, and any
+   non-refactoring risk you found (precision, validation, contract ambiguity)
+   named as a separate behavior change — never dropped silently.
 3. `grilling` — grill the design. Out: one round of numbered questions, each
    with a recommended answer; the round covers every axis the target has —
    need-to-exist, failure and atomicity, ordering, scale and backpressure,
