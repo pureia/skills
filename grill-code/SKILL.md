@@ -50,9 +50,9 @@ For example:
 Headings exactly as above; body in the user's language. Section 1 rows cite
 `file:line` and the rung; section 4 steps end with the exact command that
 proves them (`npm test`, not "tests pass"). Sections 1-4 are bullets and
-tables, never paragraphs. Section 5 is the only
-place with code, code before its three lines of explanation. "just build it":
-skip section 2, state "interview skipped", still emit 1, 4, 5.
+tables, never paragraphs. Section 5 is the only place with code, code before
+its three lines of explanation. "just build it": skip section 2, state
+"interview skipped", still emit 1, 4, 5.
 
 ## Landing gate
 
