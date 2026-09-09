@@ -22,9 +22,15 @@ Carry every skill's instructions forward — later skills stack on earlier ones.
 2. `refactoring-coding-standard` — route smells to refactorings. Out: one
    ordered refactor path, each step with its verification, plus the therapies
    you excluded and why.
-3. `grill-with-docs` — grill the design, then write the docs it produces.
-   Out: one round of numbered questions with a recommended answer each, then
-   the CONTEXT.md / ADR writes once the user answers.
+3. `grilling` — grill the design. Out: one round of numbered questions
+   with a recommended answer each.
+4. `domain-modeling` — write the docs the answers settle. Out: the
+   CONTEXT.md / ADR writes, or "none" plus the one-line reason nothing was
+   writable yet.
+
+   The wrappers `grill-with-docs` and `grill-me` are user-only; calling them
+   returns "not available for model invocation". Never call them — call the
+   members above.
 
 Pass the user's arguments through with each call (`/grill-code <target>` →
 the same target; ponytail also takes `lite|full|ultra`).
@@ -36,11 +42,14 @@ the same target; ponytail also takes `lite|full|ultra`).
 - After each skill returns, hold its instructions and follow them. Do not
   re-call a skill you already loaded in this session.
 - A skill that fails to load: say so in one line, continue with the rest.
+- The wrapper names are user-only: `grill-with-docs` and `grill-me` are
+  rejected for model invocation. Load `grilling` and `domain-modeling`
+  instead. Never ask the user to type a slash command for you.
 - Conflicts between skills — user ruling wins; otherwise precedence is
   ponytail (what should exist) → grilling/domain-modeling (what the design
   should be) → refactoring (how to get there). Name the conflict and the
   ruling you applied, one line each.
-- `grill-with-docs` ends in an interview: ask its questions, then apply
+- `grilling` ends in an interview: ask its questions, then apply
   refactoring to the answers. Do not re-interview what the user already said.
 - The refactoring skill's cheatsheet is the entry point; open chapters only
   when the cheatsheet cannot decide the smell.
@@ -57,6 +66,9 @@ the same target; ponytail also takes `lite|full|ultra`).
 ```
 
   Sections 1-4 are bullets and tables, never paragraphs. Section 5 is the
-  only place with code. Three lines of explanation max after the code.
+  only place with code, and the code comes before its three lines of
+  explanation. When the refactoring skill's checkpoint blocks edits (no test
+  suite, public API, multi-file scope), section 5 is the plan's code as a
+  paste, not a file write, and section 4 says so.
 - "just build it" / no time to grill: skip step 3's interview, run ponytail
   plus refactoring, and say the interview was skipped.
