@@ -1,74 +1,76 @@
 ---
 name: grill-code
 description: >
-  One-shot code workflow that dispatches to three skills in order: grill the
-  design, document the domain, then force the laziest refactoring that still
-  works. Use when the user says "grill-code", "grill the code", "challenge and
-  refactor this", "review and simplify", "code grill", or asks for a code
-  review that both questions the design and ships a minimal refactor.
+  One-shot code workflow: grill the design, document the domain, force the
+  laziest refactoring that still works. Use when the user says "grill-code",
+  "grill the code", "challenge and refactor this", or "review and simplify".
 disable-model-invocation: true
 argument-hint: "[target: file, module, diff, or design]"
 ---
 
 # Grill Code
 
-Load each skill below by calling the Skill tool once per skill, in this order.
-Carry every skill's instructions forward — later skills stack on earlier ones.
+Call the Skill tool once per skill, in order; carry each skill's instructions
+forward — later skills stack on earlier ones.
 
 ## Steps
 
-1. `ponytail` — set the bar for what is allowed to exist. Out: the ladder
-   ruling on each proposed piece of code (exists / reuse / stdlib / delete).
-2. `refactoring-coding-standard` — route smells to refactorings. Out: one
-   ordered refactor path, each step with its verification, plus the therapies
-   you excluded and why.
-3. `grilling` — grill the design. Out: one round of numbered questions
-   with a recommended answer each.
-4. `domain-modeling` — write the docs the answers settle. Out: the
-   CONTEXT.md / ADR writes, or "none" plus the one-line reason nothing was
-   writable yet.
+1. `ponytail` — what is allowed to exist. Out: the ladder ruling per piece
+   (exists / reuse / stdlib / delete).
+2. `refactoring-coding-standard` — smells to refactorings. Out: one ordered
+   refactor path, each step with its verification, plus the therapies you
+   excluded and why.
+3. `grilling` — grill the design. Out: one round of numbered questions, each
+   with a recommended answer.
+4. `domain-modeling` — write the docs the answers settle. Out: the CONTEXT.md
+   / ADR writes, or "none" plus the one-line reason nothing was writable yet.
 
-   The wrappers `grill-with-docs` and `grill-me` are user-only; calling them
-   returns "not available for model invocation". Never call them — call the
-   members above.
+Pass the user's arguments through; ponytail also takes `lite|full|ultra`.
 
-Pass the user's arguments through with each call (`/grill-code <target>` →
-the same target; ponytail also takes `lite|full|ultra`).
+## Output
 
-## Rules
-
-- One Skill call per skill. A skill that returns "call the Skill tool for X"
-  means call X next — chain it, do not re-call the wrapper.
-- After each skill returns, hold its instructions and follow them. Do not
-  re-call a skill you already loaded in this session.
-- A skill that fails to load: say so in one line, continue with the rest.
-- The wrapper names are user-only: `grill-with-docs` and `grill-me` are
-  rejected for model invocation. Load `grilling` and `domain-modeling`
-  instead. Never ask the user to type a slash command for you.
-- Conflicts between skills — user ruling wins; otherwise precedence is
-  ponytail (what should exist) → grilling/domain-modeling (what the design
-  should be) → refactoring (how to get there). Name the conflict and the
-  ruling you applied, one line each.
-- `grilling` ends in an interview: ask its questions, then apply
-  refactoring to the answers. Do not re-interview what the user already said.
-- The refactoring skill's cheatsheet is the entry point; open chapters only
-  when the cheatsheet cannot decide the smell.
-- The refactor path is a plan, not an edit: apply the ponytail ruling and the
-  refactoring plan to the code only after the design questions are answered.
-- Output shape, in this order, no prose between sections:
+In this order, no prose between sections:
 
 ```
-## 1. Grill verdict        — what should not exist; the one ruling per item
+## 1. Grill verdict        — what should not exist; one ruling per item
 ## 2. Design questions      — Q1..Qn, each with "➡️ <recommended answer>"
 ## 3. Docs                 — files written (CONTEXT.md / ADR path), or "none"
 ## 4. Refactor plan        — ordered steps: smell → therapy → verification
 ## 5. Code                 — the lazy version, smallest diff
 ```
 
-  Sections 1-4 are bullets and tables, never paragraphs. Section 5 is the
-  only place with code, and the code comes before its three lines of
-  explanation. When the refactoring skill's checkpoint blocks edits (no test
-  suite, public API, multi-file scope), section 5 is the plan's code as a
-  paste, not a file write, and section 4 says so.
-- "just build it" / no time to grill: skip step 3's interview, run ponytail
-  plus refactoring, and say the interview was skipped.
+Sections 1-4 are bullets and tables, never paragraphs. Section 5 is the only
+place with code, code before its three lines of explanation. When the
+refactoring checkpoint blocks edits (no test suite, public API, multi-file),
+section 5 is the plan's code as a paste, not a file write, and section 4 says
+so. "just build it": skip section 2, state "interview skipped", still emit
+1, 4, 5.
+
+## If X fails → do Y
+
+| X | Y |
+|---|---|
+| a wrapper (`grill-code`, `grill-with-docs`, `grill-me`) refused | user-only: load `grilling` then `domain-modeling`; never ask for a slash command |
+| the target is not in the workspace | say which path you searched, ask for the path or pasted source |
+| a comment says "do not delete", the user says delete | user ruling wins; one line, git keeps the history |
+| no test covers the target | plan only, no file edits |
+
+## Checkpoints
+
+- 🔴 Code lands only after the user answers section 2. Plan and paste until
+  then.
+- 🛑 One round, then stop: show the ruling, the plan and the verification
+  result, then wait. Do not start round two on your own.
+
+## Do not
+
+- Do not call the wrappers with the Skill tool — user-only, refused.
+- Do not re-ask what the user answered, or re-interview what the code settles.
+- Do not invent a target: no file, no refactor.
+- Do not edit files before section 2 is answered, or when no test covers the
+  target.
+- Do not silently drop a step: one line naming the reason.
+- Do not pad the sections with prose, restated requirements, or a tour of the
+  skills you loaded.
+- Do not open chapters while the cheatsheet can decide the smell.
+- Do not offer the full version of a thing the user did not ask for.

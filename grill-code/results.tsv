@@ -1,2 +1,3 @@
 timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
-2026-09-09T00:00	b048760	grill-code	-	-	baseline	-	Phase1基线：结构dims1-7,9=7/6/5/3/7/9/8/4(加权64.6)+dim8实测6子agent(with/without×T1-T3) pending	dry_run
+2026-09-09T00:30	b048760	grill-code	-	64.6	baseline	-	Phase1基线:结构dims1-7,9=7/6/5/3/7/9/8/4(加权59.6)+dim8=6.0;runtime_warn=0	full_test
+2026-09-09T00:40	b048760	grill-code	-	-	probe	-	T1-T3 六子agent(with/without):with-skill 五段式结构/坏味道ch引用/访谈格式全面胜 baseline;但 3/3 报同一硬伤——grill-with-docs 为 user-only 加载被拒+Output'Code first'自相矛盾	dry_run
