@@ -50,10 +50,20 @@ Headings exactly as above; body in the user's language. Section 1 rows cite
 `file:line` and the rung; section 4 steps end with the exact command that
 proves them (`npm test`, not "tests pass"). Sections 1-4 are bullets and
 tables, never paragraphs. Section 5 is the only
-place with code, code before its three lines of explanation. When the
-refactoring checkpoint blocks edits (no test suite, public API, multi-file),
-section 5 is a paste, not a write, and section 4 says so. "just build it":
+place with code, code before its three lines of explanation. "just build it":
 skip section 2, state "interview skipped", still emit 1, 4, 5.
+
+## Landing gate
+
+Section 5 is a write only when a row holds; otherwise it is a paste, and
+section 4 says so.
+
+| Situation | Section 5 |
+|---|---|
+| section 2 answered, or the user said "just build it" — and a test covers the target, one file, no public-API change | write |
+| no test covers the target | paste and name the missing test; the user asked to change the code anyway → write that test first, then land |
+| public API, multi-file, or wide scope | paste the plan until the user confirms the summary |
+| no git and no backup outside the repo | paste; the paste is the rollback |
 
 ## If X fails → do Y
 
@@ -64,7 +74,7 @@ skip section 2, state "interview skipped", still emit 1, 4, 5.
 | a member skill will not load | run that step from its contract, one line, marked `(not loaded)` | name the step that is missing; never skip it silently |
 | a wrapper (`grill-code`, `grill-with-docs`, `grill-me`) refused | user-only: load `grilling` then `domain-modeling`; never ask for a slash command | — |
 | a comment says "do not delete", the user says delete | user ruling wins; one line | no git repo → say so; the ruling rests on the tests and the plan, not on history |
-| no test covers the target | plan only, no file edits | paste section 5 and name the missing test |
+| no test covers the target | landing gate: paste section 5, name the missing test | the user asked for the change → write that test first, then land; never land untested code |
 
 ## Conflicts
 
@@ -75,8 +85,7 @@ user answered or re-interview what the code settles.
 
 ## Checkpoints
 
-- 🔴 Code lands only after the user answers section 2; plan and paste until
-  then.
+- 🔴 Code lands only through the landing gate; plan and paste until then.
 - 🛑 One round, then stop: show ruling, plan and verification, then wait. Do
   not start round two on your own.
 
@@ -84,7 +93,7 @@ user answered or re-interview what the code settles.
 
 - Do not call the wrappers with the Skill tool — user-only, refused.
 - Do not invent a target: with no candidate in the workspace, no refactor.
-- Do not edit files before section 2 is answered, or when no test covers it.
+- Do not edit files outside the landing gate.
 - Do not silently drop a step: one line naming the reason.
 - Do not pad the sections with prose or a skills tour.
 - Do not open chapters while the cheatsheet can decide the smell.
