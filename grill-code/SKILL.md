@@ -55,15 +55,16 @@ skip section 2, state "interview skipped", still emit 1, 4, 5.
 
 ## Landing gate
 
-Section 5 is a write only when a row holds; otherwise it is a paste, and
-section 4 says so.
+First matching row wins; section 4 says so when section 5 is a paste.
 
 | Situation | Section 5 |
 |---|---|
-| section 2 answered, or the user said "just build it" — and a test covers the target, one file, no public-API change | write |
-| no test covers the target | paste and name the missing test; the user asked to change the code anyway → write that test first, then land |
 | public API, multi-file, or wide scope | paste the plan until the user confirms the summary |
-| no git and no backup outside the repo | paste; the paste is the rollback |
+| no test covers the target | paste and name the missing test; the user asked to change the code anyway → write that test first, then land |
+| section 2 answered, or the user said "just build it" — one file, no public-API change | write |
+| otherwise (section 2 unanswered) | paste; the questions are the deliverable |
+
+No git and no backup outside the repo → the paste is the rollback; say so.
 
 ## If X fails → do Y
 
