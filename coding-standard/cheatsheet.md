@@ -31,7 +31,7 @@
 | Trigger | First fix | Still stuck |
 |---|---|---|
 | No good name comes to mind while extracting | Stop extracting, or use a literal placeholder name and carry on | Inline it back — not being able to name it usually means it should not exist |
-| No tests, or tests are red | Write the test that exposes the current behaviour (watch it fail) | Return to the last green version and choose a smaller refactoring path |
+| No tests, or tests are red | Write the test that pins the current behaviour, watch it pass, then prove it can fail (break the code deliberately, see red, undo) | Return to the last green version and choose a smaller refactoring path |
 | Behaviour changed after a step (tests pass, results are wrong) | Roll back to the last verifiable version | Locate the difference with Split Phase or a side-by-side comparison, then choose a path |
 | The target is a published API, or not all callers can be found | New signature + old function as a forwarding shell (migration rename) | Migrate callers one by one, delete the shell only at the end — never in one move |
 | The extracted fragment would have to return several assigned variables | Replace Temp with Query / Split Variable first, to simplify | Abandon the extraction; do the preparatory work first and come back |

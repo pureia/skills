@@ -22,7 +22,7 @@ decides which file is worth its context.
 |---|---|---|
 | writing new code | [standard.md](standard.md) — only the group matching what they are writing | Track C |
 | adding a feature to existing code | [standard.md](standard.md), then [cheatsheet.md](cheatsheet.md) § "When is it worth changing existing code" | Track A plan, then Track C |
-| reviewing code | [standard.md](standard.md) as the checklist | Track A |
+| reviewing code | [standard.md](standard.md) — the whole file is the checklist here, unlike the one-group rule for writing | Track A |
 | asking "should this change?" or refactoring | [cheatsheet.md](cheatsheet.md) first, [patterns.md](patterns.md) for the chosen remedy | Track A, then § Doing the change |
 | told to make the change ("just fix it") | as above, plus the checkpoints | § Doing the change |
 | learning or teaching a technique | [patterns.md](patterns.md), then the chapter | Track B |
@@ -40,7 +40,7 @@ Top to bottom, stop at the first hit:
 5. **[chapters/](chapters/)** when motivation, a worked example, or a counter-example is needed.
 6. **[glossary.md](glossary.md)** when a term is unclear — every entry carries its chNN source.
 7. **The user proposes a popular practice** (Optional, Strategy, Null Object) → [cheatsheet.md](cheatsheet.md) § "Popular practice vs Fowler's position" first, then answer from the book's position.
-8. **Not in the book at all** (RxJS, framework idioms, a language's own style) → say so plainly, reason from the book's principles, and never invent a chapter citation.
+8. **Not in the book at all** → say so plainly, reason from the book's principles, and never invent a chapter citation. Three shapes of this: a practice the book never treats (RxJS, framework idioms, a language's own style); a real smell with **no named refactoring behind it** (magic literals — say so and use the nearest rule, e.g. N3, rather than reaching for a chapter); and "is X even in this skill?" — answer from § Out of scope or from the rule ids, and do not go searching the package for absence.
 9. **A companion file cannot be read** (missing, unreadable, or the client loaded only this file) → say so, then answer from what is actually here: the scenario table, the checkpoints, and the anti-pattern blacklist. Never invent rule ids, chapter numbers or technique mechanics you could not read — a thinner answer that is true beats a rich one that is guessed.
 10. **The user names a chapter** (ch10, "the one about conditionals") → load that file from [chapters/](chapters/) directly; that is what the argument hint takes chapter numbers for.
 11. **Nothing to route on** — no scenario, no code, no topic → [cheatsheet.md](cheatsheet.md) is the default decision entry; if even that is unclear, ask what they are working on instead of guessing.
@@ -72,7 +72,7 @@ they want the plan or the work.
 
 - **① Verdict** — change it / leave it, plus one sentence of reason, citing the smell name (ch03) or the rule id.
 - **② Evidence** — every smell you found, by location (function / line / fragment) → first-response remedy (chNN); list them all, expand none. Nothing wrong? Then list the smells you ruled out and why, and separately flag any **correctness hazard** found ([standard.md](standard.md) §Hazards) as a separate task, never folded into the refactoring plan.
-- **③ Plan** — collect the **hard constraints** first: a frozen public API, single-file scope, no new dependencies, a time budget, anything else the user stated (if they said nothing, infer from the code and say what you inferred). Then produce *one* ordered path, not a menu — a shortlist of alternatives is not a plan. Every step = action + verification (compile / test / behaviour comparison) + what to do when it fails. Steps that touch a published API or span files carry 🔴 pending confirmation. Remedies that violate a hard constraint are listed as excluded, with the reason. Unresolved constraint conflicts → 🔴 state both sides and their consequences, ask the user to rule; do not pick silently. Code shape: intermediate steps give the fragment or the action described; the final form gets a complete code block.
+- **③ Plan** — collect the **hard constraints** first: a frozen public API, single-file scope, no new dependencies, a time budget, anything else the user stated (if they said nothing, infer from the code and say what you inferred). Then produce *one* ordered path, not a menu — a shortlist of alternatives is not a plan. Every step = action + verification (compile / test / behaviour comparison) + what to do when it fails. Steps that touch a published API or span files carry 🔴 pending confirmation. Remedies that violate a hard constraint are listed as excluded, with the reason. Unresolved constraint conflicts → 🔴 state both sides and their consequences, ask the user to rule; do not pick silently. When there is no user to ask (an autonomous run), do not stall: state both sides, mark the assumption you proceeded on, and carry on with it flagged so it can be overturned. Code shape: intermediate steps give the fragment or the action described; the final form gets a complete code block.
 - **④ Tests and open questions** — which tests to write first (boundary values, watched red), how each step is re-verified, and only those business questions that change the plan.
 - **⑤ Not doing** — what is deliberately untouched (YAGNI, anti-pattern blacklist, out of scope, no suite → plan only) and the hazards from ② declared as "not in this plan". Do not lay out the whole catalogue at once: everything you *could* also fix, listed together, is over-refactoring.
 
@@ -112,7 +112,12 @@ step is small, verified, and revertible on its own.
 2. **Smallest step** — one behaviour-preserving change (rename, extract, pipeline, move). If a step needs two ideas at once, split it.
 3. **Verify, then commit** — language check → the covering tests → the full suite → commit while green. A red bar means roll back *this* step and take a smaller one; never debug forward on a red bar.
 4. **Repeat** — back to 2 until the plan is done.
-5. **Close out in the past tense** — state what was actually done and what each step's verification showed ("extracted `itemShippingFee`, suite green, committed"), not a to-do list of what should be done, and name what you deliberately did not do (Track A ⑤). If you could not execute anything, you are not in this loop: use the "verification not executed" branch of the checkpoints instead.
+5. **Close out in the past tense** — state what was actually done and what each step's verification showed ("extracted `itemShippingFee`, suite green, committed"), not a to-do list of what should be done, and name what you deliberately did not do (Track A ⑤). **When the loop cannot run as written.** It bends; it does not break:
+
+- **No repository to commit to.** Do not fake it. Either make a scratch copy and initialise a repository there, so each step really is a revertible commit, or say plainly that the commit step is unavailable and hand the steps over as a patch. Never write "committed" when nothing was committed.
+- **No suite covering the target.** The pinning tests are then yours, not the project's — say so, and keep them with the change so the next person inherits them.
+- **A differential check is a legitimate second opinion, not a green bar.** Running the original and the changed code side by side over the same inputs and comparing the results is the strongest evidence available when the real suite is out of reach. Name it a differential check, state which inputs it covered and which it did not, and never report it as "the tests pass". If you had to alter the code to make it testable — an added `export`, a seam, a stub — disclose that what you verified is not byte-identical to what you delivered.
+- **Nothing runnable at all.** Then you are not in this loop: use the "verification not executed" branch of the checkpoints.
 
 **Language adaptation** — the book's examples are JavaScript. Whatever the user's
 language is, produce the changed code *in that language*: translate the mechanism
@@ -142,11 +147,14 @@ Stop when you hit one of these.
 | [patterns.md](patterns.md) | The 61 techniques: when to use / how / tradeoff |
 | [glossary.md](glossary.md) | Terms, each with its chNN source |
 | [chapters/](chapters/) | ch01–ch13 digests, read on demand |
+| [test-prompts.json](test-prompts.json) | **Evaluation material, not a loading target** — the probes this skill is tested with, including their expected answers. Never read it to answer a user, and never let it shape a reply. |
 
-**Bilingual glosses** — each of the 61 techniques and the 24 smells carries its Chinese
-name in full-width parentheses at first mention, because those are the two indexes a
-reader of the Chinese edition looks things up by. Other book concepts keep a Chinese
-gloss only in [glossary.md](glossary.md).
+**Bilingual glosses** — inside this skill's own files, each of the 61 techniques and the
+24 smells carries its Chinese name in full-width parentheses at first mention, because
+those are the two indexes a reader of the Chinese edition looks things up by; other book
+concepts keep a Chinese gloss only in [glossary.md](glossary.md). This governs the skill
+files, not your answer: answer in the user's language and add a Chinese gloss only when
+the user is reading Chinese and the technique's name is doing real work in the reply.
 
 ## Chapter index
 

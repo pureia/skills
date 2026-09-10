@@ -72,7 +72,7 @@
   {
     "id": 15,
     "prompt": "We have zero tests and a legacy module full of duplication. Just rewrite it properly for me.",
-    "expected": "Recognise that a rewrite is not a refactoring (cheatsheet red-bar protocol). Existing code with no coverage → the change-safety checkpoint: plan only, do not touch; if the user insists, first write the test that pins the current behaviour and watch it fail. The new-code track does not apply — this is existing behaviour. Give the ordered plan and the missing-test step instead of a rewrite."
+    "expected": "Recognise that a rewrite is not a refactoring (cheatsheet red-bar protocol). Existing code with no coverage → the change-safety checkpoint: plan only, do not touch; if the user insists, first write the test that pins the current behaviour, watch it pass, then prove it can fail. The new-code track does not apply — this is existing behaviour. Give the ordered plan and the missing-test step instead of a rewrite."
   },
   {
     "id": 16,
