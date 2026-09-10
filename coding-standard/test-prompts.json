@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "prompt": "审查这段代码的坏味道并给出重构建议：function calcShipping(cart) { let fee = 0; for (let i = 0; i < cart.items.length; i++) { const w = cart.items[i].weight; const q = cart.items[i].quantity; if (w > 1000) { fee += q * 20; } else { fee += q * 10; } } if (fee > 500) { fee = fee * 0.9; } return fee; }",
+    "expected": "Track A ①–⑤. Identify Loops (ch08), magic numbers, Long Function (ch06). Plan ordered by the priority criteria: Replace Loop with Pipeline, Extract Function, name the constants, each step with its verification. Red-bar discipline stated (baseline green first). No behaviour change smuggled in."
+  },
+  {
+    "id": 2,
+    "prompt": "我想学「以多态取代条件表达式」，它适合什么场景、怎么做？",
+    "expected": "Track B, four parts. Route to ch10. Motivation, mechanics, tradeoff (indirection cost). At least one counter-example: a single stable switch is not a smell. Before/after fragment. Answer language follows the user (Chinese)."
+  },
+  {
+    "id": 3,
+    "prompt": "我们项目代码里到处都是 if (user == null) return ... 这种判断，代码量很大，要不要全部改成「引入特例」？",
+    "expected": "Separate guard clauses from Introduce Special Case; the number of null checks is not the criterion (ch10) — a repeated default shape is. Give the leave-it-alone cases (low change frequency, YAGNI, risk). Tests first, small steps. Do not push a bulk rewrite."
+  },
+  {
+    "id": 4,
+    "prompt": "我们项目有完整的测试套件，这段代码坏味道很明显，直接帮我改：function findPrice(order) { var price = 0; for (var i = 0; i < order.lines.length; i++) { var p = order.lines[i].price * order.lines[i].qty; if (order.lines[i].qty > 10) { p = p * 0.95; } price = price + p; } return price; }",
+    "expected": "Hands-on subflow: run the baseline first, then minimal steps (Replace Loop with Pipeline, Extract Function, name the constant), verify and commit each step, close out with a Track A record in the past tense. Does not touch anything outside the request."
+  },
+  {
+    "id": 5,
+    "prompt": "我们有完整的测试套件。这个方法 `calculateOrder(firstName, lastName, email, phone, address, birthDate): number` 是我们的公共 API，6 个 String 参数太长，我想重构成参数对象，但公司规定公共 API 的签名不能改。你帮我看看怎么处理。",
+    "expected": "Track A ①–⑤. Long Parameter List (ch03). The hard constraint (published signature frozen) conflicts with Introduce Parameter Object / Preserve Whole Object — surface the conflict, give both sides, ask the user to rule instead of choosing silently. Excluded remedies listed with reasons. New signature + forwarding shell + gradual migration (I3). Red boundary tests first."
+  },
+  {
+    "id": 6,
+    "prompt": "我们项目控制台里有一堆命令式的 for/if 循环处理用户操作日志，我想整套换成 RxJS 的流式处理，Fowler 的《重构》怎么看待这种改法？",
+    "expected": "Say plainly that the book does not cover RxJS; never invent a chapter citation. Reason from the book's principles: mechanism translation (Replace Loop with Pipeline ch08 → from/filter/map/reduce/tap). Track B shape. At least one counter-example (YAGNI; a wholesale swap is not a refactoring). Small steps, red bar, behaviour unchanged."
+  },
+  {
+    "id": 7,
+    "prompt": "Hi, the team is switching to English docs. Can you look at this TypeScript service and tell me what's wrong? class OrderService { calculateTotal(order: Order): number { let total = 0; for (const line of order.lines) { total += line.price * line.qty; if (line.qty > 10) { total *= 0.95; } } if (total > 500) { total *= 0.9; } return total; } } Also, which chapter of Refactoring should I read for this?",
+    "expected": "Answer in the user's language (English). Smells: Loops → Replace Loop with Pipeline (ch08), Long Function → Extract Function (ch06), magic numbers. Flag the behaviour doubt: the 0.95 discount compounds across every line after the tenth — pin the current behaviour with a red test before touching it. Cite ch08/ch06 correctly, no page numbers. Track A ①–⑤ complete. At least one counter-example (the total threshold may be a real business rule, not a bug)."
+  },
+  {
+    "id": 8,
+    "prompt": "这段 Java 代码要不要改：`if (order == null || order.lines == null || order.lines.isEmpty()) { return; }` —— 有人建议拆成三个卫语句 `if (order == null) return;` 那个样子。你觉得该不该改？给个判断就行，不用详细方案。",
+    "expected": "Track A with only ①. Verdict: not worth it — few, stable branches with compact semantics (ch10 Consolidate Conditional Expression vs guard clauses); splitting into three adds no readability. Fowler's position as the counter-example (splitting for style is over-refactoring / YAGNI). The no-test-suite warning must not dominate a one-line verdict."
+  },
+  {
+    "id": 9,
+    "prompt": "这段代码有没有问题，要不要重构？\n```python\ndef apply_discount(price: float, discount_rate: float) -> float:\n    return price * (1 - discount_rate)\n```",
+    "expected": "Verdict: leave it — no smell (no Long Function, no duplication, no mysterious name). List the smells ruled out with reasons (ch02 Rule of Three / YAGNI). Do not manufacture a refactoring plan. A test is still worth writing (ch04) but is not pushed as a refactor."
+  },
+  {
+    "id": 10,
+    "prompt": "我们有个 ShopOrder 类，800 多行，管订单校验、价格计算、库存扣减、通知客户、生成发票，还挂着支付逻辑。公司要求逐步重构但整体不能停下。帮忙看看怎么拆？",
+    "expected": "Track A: ① verdict — change it (Large Class, ch03/ch07); ② signs by location → 🔴 checkpoint: give the plan summary and wait for confirmation before expanding (wide scope, multi-file); ③ one ordered path (dependency order → risk gradient → value/timing; behaviour-preserving small steps first); ④ pin behaviour with tests before touching; ⑤ not-doing list (YAGNI, no smuggled behaviour changes, no plugin architecture on spec). Does not dump the whole decomposition at once."
+  },
+  {
+    "id": 11,
+    "prompt": "I'm writing a brand-new TypeScript function that computes an order total with a tiered discount: 5% once the line quantity passes 10, and another 10% once the total passes 500. There is no existing code — this is new. Write it.",
+    "expected": "Track C: code first, in the user's language, applying the standard (small named functions F1, decomposed conditions C1, guard clauses where a branch is exceptional C2, domain types over primitives N3). Ships with the test for the new behaviour including boundary values (T1/T2). No baseline demanded — there is no previous behaviour (writing-new-code checkpoint). Footnote only if a rule was traded off; no rule-by-rule dump."
+  },
+  {
+    "id": 12,
+    "prompt": "Before I write it: what does your coding standard say about a function that both validates the input and normalises it?",
+    "expected": "Answer from standard.md by rule id with chNN traceability: one job per function (F1, Extract Function ch06), a function either answers or changes state but not both (Separate Query from Modifier, ch11), naming follows meaning (N1/N2). Short and forward-looking — a writing-time question, not a code review; do not force a Track A verdict onto it."
+  },
+  {
+    "id": 13,
+    "prompt": "Our team's linter enforces snake_case function names and 4-space indentation. Does that violate this coding standard?",
+    "expected": "Out of scope: casing, indentation, import order and file layout belong to the project's own linter/formatter (SKILL.md § Out of scope: style and formatting). The standard covers whether a name means what it says (N1–N3), not how it is spelled. Read the project config rather than legislating; do not invent a rival style rule."
+  },
+  {
+    "id": 14,
+    "prompt": "This Java service computes invoice totals with double. I'm about to extract the pricing loop into its own method — while I'm in there, should I switch it to BigDecimal?",
+    "expected": "The precision problem is a correctness hazard (standard.md § H1, marked NON-BOOK): surface it, name it, and declare it a separate task — a behaviour change must never ride along with a refactoring (H4, Two Hats ch02). Do the extraction as a behaviour-preserving step with tests; the BigDecimal switch gets its own task, tests and commit. Answer in the user's language."
+  },
+  {
+    "id": 15,
+    "prompt": "We have zero tests and a legacy module full of duplication. Just rewrite it properly for me.",
+    "expected": "Recognise that a rewrite is not a refactoring (cheatsheet red-bar protocol). Existing code with no coverage → the change-safety checkpoint: plan only, do not touch; if the user insists, first write the test that pins the current behaviour and watch it fail. The new-code track does not apply — this is existing behaviour. Give the ordered plan and the missing-test step instead of a rewrite."
+  },
+  {
+    "id": 16,
+    "prompt": "Review this new file I just wrote against the coding standard: `class ReportBuilder { build(data, opts) { /* 120 lines: filters, groups, formats, writes */ } }`",
+    "expected": "Track A, driven by the standard's forward rules rather than a smell hunt: cite rule ids (F1 Long Function, F2 parameter list / flag argument, M1 one reason to change, N1 naming) with their chNN sources, then the ordered plan with verification per step. Distinguishes what the standard says from mere taste; invents no rules outside the standard."
+  }
+]

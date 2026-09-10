@@ -18,7 +18,8 @@ carry each skill's instructions forward.
 1. `ponytail` — what may exist. Out: the ladder ruling per piece, cited by
    rung number (1 need to exist / 2 reuse / 3 stdlib / 4 native / 5 installed
    dep / 6 one line / 7 minimum code).
-2. `refactoring-coding-standard` — smells to refactorings. Out: one ordered
+2. `coding-standard` — the standard read backwards: smells to refactorings.
+   Out: one ordered
    refactor path, each step with its verification, what you excluded, and any
    non-refactoring risk you found (precision, validation, contract ambiguity)
    named as a separate behavior change — never dropped silently.

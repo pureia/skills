@@ -2,7 +2,7 @@
   {
     "id": 1,
     "prompt": "帮我看看这段代码并重构一下：src/pay.js 里 computeTotal 有 3 处重复的折扣判断，而且注释掉的旧逻辑还留着。",
-    "expected": "先按 ponytail 判梯级（注释残留 rung1 删、重复分支 rung2 复用已有 applyCoupon），再给 refactoring-coding-standard 的坏味道→疗法排序路径（每步带验证命令），再进 grilling 的一轮编号问题+推荐答案；domain-modeling 只在术语被裁定时落文档；代码落盘受 landing gate 管（有测试→row3 写入）"
+    "expected": "先按 ponytail 判梯级（注释残留 rung1 删、重复分支 rung2 复用已有 applyCoupon），再给 coding-standard 的坏味道→疗法排序路径（每步带验证命令），再进 grilling 的一轮编号问题+推荐答案；domain-modeling 只在术语被裁定时落文档；代码落盘受 landing gate 管（有测试→row3 写入）"
   },
   {
     "id": 2,
