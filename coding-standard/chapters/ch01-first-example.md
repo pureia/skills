@@ -7,10 +7,10 @@ A complete “theatrical troupe prints a bill” example demonstrates the whole 
 - **The Rhythm of Refactoring (compile · test · commit)**: after every tiny behavior-preserving change, immediately compile → run the tests → commit to local version control.
   - When to use: after any single refactoring step
   - Why: when you make a mistake you only have to inspect a very small change; version control provides a rollback point for failures
-- **Extract Function（提炼函数, 106）**: pull a piece of code out into a function of its own, named for what it does.
+- **Extract Function（提炼函数）**: pull a piece of code out into a function of its own, named for what it does.
   - When to use: when you see a comment, a switch branch, a loop or another semantic unit
   - Prerequisite: remove unnecessary local variables first so that extraction is simple
-- **Replace Temp with Query（以查询取代临时变量, 178）**: turn a temporary variable into a function call, removing the local scope that stands in the way.
+- **Replace Temp with Query（以查询取代临时变量）**: turn a temporary variable into a function call, removing the local scope that stands in the way.
 
 ## Key Concepts
 - **Observable behavior**: refactoring must not change user-observable behavior; irrelevant internal state (such as the function call stack) may change

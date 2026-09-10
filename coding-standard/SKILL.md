@@ -23,7 +23,8 @@ decides which file is worth its context.
 | writing new code | [standard.md](standard.md) — only the group matching what they are writing | Track C |
 | adding a feature to existing code | [standard.md](standard.md), then [cheatsheet.md](cheatsheet.md) § "When is it worth changing existing code" | Track A plan, then Track C |
 | reviewing code | [standard.md](standard.md) as the checklist | Track A |
-| asking "should this change?" or refactoring | [cheatsheet.md](cheatsheet.md) first, [patterns.md](patterns.md) for the chosen remedy | Track A (+ hands-on subflow) |
+| asking "should this change?" or refactoring | [cheatsheet.md](cheatsheet.md) first, [patterns.md](patterns.md) for the chosen remedy | Track A, then § Doing the change |
+| told to make the change ("just fix it") | as above, plus the checkpoints | § Doing the change |
 | learning or teaching a technique | [patterns.md](patterns.md), then the chapter | Track B |
 
 Never load the whole skill. The chapters are depth on demand, not background reading.
@@ -34,20 +35,24 @@ Top to bottom, stop at the first hit:
 
 1. **Scenario table above** decides the file family.
 2. **[standard.md](standard.md)** decides when the question is "how should this be written" — one group, not the file.
-3. **[cheatsheet.md](cheatsheet.md)** decides when the question is "this exists and is wrong" — smell → first-response remedy, priority order, failure fallbacks.
+3. **[cheatsheet.md](cheatsheet.md)** decides when the question is "this exists and is wrong" — smell → first-response remedy, priority order, failure fallbacks. When the answer hinges on a design choice (where a function belongs, value vs reference, inherit vs delegate, command vs function), the criterion lives in [standard.md](standard.md) — load that group as well; the refactoring scenario does not otherwise reach it.
 4. **[patterns.md](patterns.md)** when the mechanism matters: how the technique is done, what it costs.
 5. **[chapters/](chapters/)** when motivation, a worked example, or a counter-example is needed.
 6. **[glossary.md](glossary.md)** when a term is unclear — every entry carries its chNN source.
 7. **The user proposes a popular practice** (Optional, Strategy, Null Object) → [cheatsheet.md](cheatsheet.md) § "Popular practice vs Fowler's position" first, then answer from the book's position.
 8. **Not in the book at all** (RxJS, framework idioms, a language's own style) → say so plainly, reason from the book's principles, and never invent a chapter citation.
+9. **A companion file cannot be read** (missing, unreadable, or the client loaded only this file) → say so, then answer from what is actually here: the scenario table, the checkpoints, and the anti-pattern blacklist. Never invent rule ids, chapter numbers or technique mechanics you could not read — a thinner answer that is true beats a rich one that is guessed.
+10. **The user names a chapter** (ch10, "the one about conditionals") → load that file from [chapters/](chapters/) directly; that is what the argument hint takes chapter numbers for.
+11. **Nothing to route on** — no scenario, no code, no topic → [cheatsheet.md](cheatsheet.md) is the default decision entry; if even that is unclear, ask what they are working on instead of guessing.
 
 ## 🔴 Checkpoints
 
 **Changing existing code**
 
-- 🔴 **Before answering** — if the change touches a published API, spans files, or is wide in scope, or if the user is only asking whether to change something: give the plan summary and the steps, then wait. Never change code the user did not ask you to change.
-- 🔴 **After each step** — compile (or run the language check) → tests → commit. A red bar means roll back and take a smaller step, not push on.
-- 🛑 **STOP** — no test suite covering the target: plan only, do not touch the code. If the user explicitly says "just change it", first write the test that pins the current behaviour, watch it fail, then proceed.
+- 🔴 **Before answering** — if the change touches a published API, spans files, or is wide in scope, or if the user is only asking whether to change something: give the plan summary and the steps, then wait. Never change code the user did not ask you to change. "Just change it" waives the discussion of a small local change; it does not waive this rule for a published API, a cross-file change or a wide scope — those still get a summary first.
+- 🔴 **After each step** — compile (or run the language check) → the tests covering what you touched → the full suite → commit while green. Roll back on a red bar rather than pushing on, and tell the two kinds apart: a red bar you *expected* (a test written to expose a defect) is the work, a red bar you *caused* is a rollback.
+- 🛑 **STOP** — no test suite covering the target: plan only, do not touch the code. If the user explicitly says "just change it", pin the behaviour first: write the test, make it green, then prove it can fail (break the code deliberately, watch red, undo the break). A test that cannot be made to fail proves nothing.
+- 🛑 **STOP — you cannot execute anything** (no repository mounted, tests not runnable here, no runtime): say so in as many words — "verification not executed" — and change nothing. Deliver the minimal-step plan, the target end state, and a checklist for the user to run it (green baseline → one step at a time → on any red bar, roll back that step). Never write a record claiming a test or a result you did not observe.
 
 **Writing new code**
 
@@ -61,11 +66,15 @@ request, not by habit.
 
 ### Track A — assess or plan (existing code)
 
+When the user asks only for a judgement ("should I change this?", "is this a problem?"),
+give ① and stop — a plan nobody asked for is noise. The rest of the track is for when
+they want the plan or the work.
+
 - **① Verdict** — change it / leave it, plus one sentence of reason, citing the smell name (ch03) or the rule id.
-- **② Evidence** — smell → location (function / line / fragment) → first-response remedy (chNN). Nothing wrong? Then list the smells you ruled out and why, and separately flag any **correctness hazard** found ([standard.md](standard.md) §Hazards) as a separate task, never folded into the refactoring plan.
-- **③ Plan** — ordered steps from the priority criteria, each step = action + verification (compile / test / behaviour comparison). Remedies that violate a hard constraint are listed as excluded, with the reason. Unresolved constraint conflicts → 🔴 state both sides and their consequences, ask the user to rule; do not pick silently.
+- **② Evidence** — every smell you found, by location (function / line / fragment) → first-response remedy (chNN); list them all, expand none. Nothing wrong? Then list the smells you ruled out and why, and separately flag any **correctness hazard** found ([standard.md](standard.md) §Hazards) as a separate task, never folded into the refactoring plan.
+- **③ Plan** — collect the **hard constraints** first: a frozen public API, single-file scope, no new dependencies, a time budget, anything else the user stated (if they said nothing, infer from the code and say what you inferred). Then produce *one* ordered path, not a menu — a shortlist of alternatives is not a plan. Every step = action + verification (compile / test / behaviour comparison) + what to do when it fails. Steps that touch a published API or span files carry 🔴 pending confirmation. Remedies that violate a hard constraint are listed as excluded, with the reason. Unresolved constraint conflicts → 🔴 state both sides and their consequences, ask the user to rule; do not pick silently. Code shape: intermediate steps give the fragment or the action described; the final form gets a complete code block.
 - **④ Tests and open questions** — which tests to write first (boundary values, watched red), how each step is re-verified, and only those business questions that change the plan.
-- **⑤ Not doing** — what is deliberately untouched (YAGNI, anti-pattern blacklist, out of scope, no suite → plan only) and the hazards from ② declared as "not in this plan".
+- **⑤ Not doing** — what is deliberately untouched (YAGNI, anti-pattern blacklist, out of scope, no suite → plan only) and the hazards from ② declared as "not in this plan". Do not lay out the whole catalogue at once: everything you *could* also fix, listed together, is over-refactoring.
 
 ### Track B — explain a technique or concept
 
@@ -93,6 +102,22 @@ language is, produce the changed code *in that language*: translate the mechanis
 factory → constructor or static method) and keep the identifiers idiomatic to that
 language. Technique names stay as named; the mechanism is what matters.
 
+## Doing the change, not just planning it
+
+When the user asks you to make the change rather than to judge it, plan it with Track A
+first, then run this loop. The loop is what separates a refactoring from a rewrite: every
+step is small, verified, and revertible on its own.
+
+1. **Baseline** — run the tests covering the target and confirm they are green. If coverage is thin, write the tests that pin the current behaviour and watch them pass. A red bar here is not an obstacle, it is the finding: the behaviour is not pinned yet.
+2. **Smallest step** — one behaviour-preserving change (rename, extract, pipeline, move). If a step needs two ideas at once, split it.
+3. **Verify, then commit** — language check → the covering tests → the full suite → commit while green. A red bar means roll back *this* step and take a smaller one; never debug forward on a red bar.
+4. **Repeat** — back to 2 until the plan is done.
+5. **Close out in the past tense** — state what was actually done and what each step's verification showed ("extracted `itemShippingFee`, suite green, committed"), not a to-do list of what should be done, and name what you deliberately did not do (Track A ⑤). If you could not execute anything, you are not in this loop: use the "verification not executed" branch of the checkpoints instead.
+
+**Language adaptation** — the book's examples are JavaScript. Whatever the user's
+language is, produce the changed code *in that language*: translate the mechanism
+(pipeline → streams or generators, subclass override → interface implementation,
+factory → constructor or static method) and keep the identifiers idiomatic to that
 ## Anti-pattern blacklist
 
 Stop when you hit one of these.
@@ -117,6 +142,11 @@ Stop when you hit one of these.
 | [patterns.md](patterns.md) | The 61 techniques: when to use / how / tradeoff |
 | [glossary.md](glossary.md) | Terms, each with its chNN source |
 | [chapters/](chapters/) | ch01–ch13 digests, read on demand |
+
+**Bilingual glosses** — each of the 61 techniques and the 24 smells carries its Chinese
+name in full-width parentheses at first mention, because those are the two indexes a
+reader of the Chinese edition looks things up by. Other book concepts keep a Chinese
+gloss only in [glossary.md](glossary.md).
 
 ## Chapter index
 

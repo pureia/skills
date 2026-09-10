@@ -6,7 +6,7 @@ same five fields:
 - **Rule** — what must hold.
 - **Signal** — the smell (ch03) that appears when it does not.
 - **Counter-example** — what the violation looks like in real code.
-- **Remedy** — the technique that fixes it (ch06–ch12).
+- **Remedy** — the first technique to reach for, so this file stays a decision rather than a menu. A smell usually has several remedies; the full list for each one lives in [cheatsheet.md](cheatsheet.md) § "Smell → remedy".
 - **Verify** — how a reader confirms the rule holds without running anything.
 
 Rules marked **NON-BOOK** (§H) are not from *Refactoring*. They are correctness
@@ -51,7 +51,7 @@ into a refactoring step.
 - **Rule** — Money is not a `number`, a phone number is not a `string`, a range is not a pair of ints. When a value has rules, it is a type.
 - **Signal** — Primitive Obsession, Data Clumps (ch03)
 - **Counter-example** — `amount: number` plus `currency: string` passed together through six signatures; validation of the same format in four places.
-- **Remedy** — Replace Primitive with Object, Replace Type Code with Subclasses (ch07, ch12)
+- **Remedy** — Replace Primitive with Object (ch07)
 - **Verify** — The rules that govern the value are declared once, next to the type, not repeated at each use site.
 
 ---
@@ -62,14 +62,14 @@ into a refactoring step.
 - **Rule** — Extract until each function does one thing and its name says what that is. A one-line function is fine when the name carries meaning the body does not; length alone is never the reason to extract or not to extract.
 - **Signal** — Long Function (ch03) — around six lines is where the smell starts.
 - **Counter-example** — `handleOrder()` that validates, prices, persists and emails; a nested `if` ladder inside it.
-- **Remedy** — Extract Function (ch06). When temporaries block extraction: Replace Temp with Query → Introduce Parameter Object → Replace Function with Command (ch06, ch07, ch11).
+- **Remedy** — Extract Function (ch06). When temporaries block extraction: Replace Temp with Query → Introduce Parameter Object → Replace Function with Command — reach for the command only when the parameters or the state are complex enough that you want to run it in steps; otherwise it stays a function (ch06, ch07, ch11).
 - **Verify** — The function fits one screen and its name is a complete sentence about the domain.
 
 ### F2 · A short parameter list of things that are actually one thing each
 - **Rule** — Keep the parameter count low; group values that always travel together; never pass a flag that only selects a code path.
 - **Signal** — Long Parameter List, Data Clumps (ch03)
 - **Counter-example** — `createUser(name, email, street, city, zip, country, isAdmin)`; `sendReport(data, true)` where the boolean picks the format.
-- **Remedy** — Introduce Parameter Object, Preserve Whole Object, Remove Flag Argument, Replace Parameter with Query (ch06, ch11)
+- **Remedy** — Introduce Parameter Object (ch06)
 - **Verify** — Every call site is readable without the signature; no caller passes a literal `true`/`false` that changes behaviour.
 
 ### F3 · The function lives with the data it uses
@@ -91,17 +91,17 @@ into a refactoring step.
 - **Verify** — No field can be made inconsistent by updating another field.
 
 ### D2 · One variable, one meaning
-- **Rule** — A variable that carries two meanings at different times is two variables. Accumulators and loop counters are the accepted exceptions.
+- **Rule** — Give each meaning its own variable, so a reader never has to track what a name refers to *now*; accumulators and loop counters are the only names allowed to carry two jobs.
 - **Signal** — Mutable Data (ch03)
 - **Counter-example** — `result` holding a search hit, then a cache value, then an error message in the same function.
 - **Remedy** — Split Variable (ch09)
 - **Verify** — You can describe the variable's meaning in one phrase that holds for its whole lifetime.
 
 ### D3 · Shared and mutable are both contained
-- **Rule** — Anything global, long-lived or widely writable gets an access point that can be watched; the smaller the scope of mutation, the better.
+- **Rule** — Funnel every write to shared state through one named access point, and keep the scope of mutation as small as the problem allows.
 - **Signal** — Global Data, Mutable Data (ch03)
 - **Counter-example** — A module-level `config` object mutated from six files; a singleton whose state differs per test.
-- **Remedy** — Encapsulate Variable, Encapsulate Collection, Remove Setting Method, Combine Functions into Transform/Class (ch06, ch07, ch11)
+- **Remedy** — Encapsulate Variable (ch06)
 - **Verify** — Every write goes through one named place, and you can find all of them.
 
 ### D4 · Choose value or reference deliberately
@@ -137,10 +137,10 @@ into a refactoring step.
 - **Verify** — Each condition's failure mode is still visible and the order is still safe.
 
 ### C4 · The same decision is expressed once
-- **Rule** — Repeated switches or if-ladders over the same type, in more than one place, are one decision expressed many times. Replace the repetition with polymorphism.
+- **Rule** — Express a decision once: put the behaviour on the type itself rather than repeating the same test in several places.
 - **Signal** — Repeated Switches (ch03)
 - **Counter-example** — `switch (employee.type)` in `pay()`, `benefits()` and `schedule()`, each updated when a type is added.
-- **Remedy** — Replace Conditional with Polymorphism, Replace Type Code with Subclasses (ch10, ch12)
+- **Remedy** — Replace Conditional with Polymorphism (ch10)
 - **Verify** — Adding a new variant means adding one thing in one place.
 - **Counter-example that is not a smell** — A single switch, in one place, over stable branches. Polymorphism buys indirection you will pay for at every read; use a data table instead (ch10).
 
@@ -148,7 +148,7 @@ into a refactoring step.
 - **Rule** — Express data transformation as filter/map/reduce (or the language's equivalent) so the intent is visible. A loop doing two jobs is two loops.
 - **Signal** — Loops (ch03)
 - **Counter-example** — A `for` loop accumulating a total, collecting names and counting failures in one pass, with three index variables.
-- **Remedy** — Replace Loop with Pipeline, Split Loop (ch08)
+- **Remedy** — Replace Loop with Pipeline (ch08)
 - **Verify** — The data flow reads in one direction with no index arithmetic.
 
 ---
@@ -156,24 +156,24 @@ into a refactoring step.
 ## Modules and dependencies
 
 ### M1 · One reason to change, and one change touches one place
-- **Rule** — A module that changes for several unrelated reasons is doing several jobs; a change that forces edits across many modules means something is scattered. Both are the same coupling problem seen from opposite sides.
+- **Rule** — Put the code that changes together in one module, and give each module one reason to change.
 - **Signal** — Divergent Change (one module, many change directions); Shotgun Surgery (one change, many modules) (ch03)
 - **Counter-example** — A `Report` class edited for tax rules, for layout and for database migrations; or adding one field that requires edits in nine files.
-- **Remedy** — Split Phase, Extract Class, Move Function/Field, Combine Functions into Class/Transform, Inline (ch06, ch07, ch08)
-- **Verify** — You can name the module's single responsibility in one phrase, and one change lands in one place.
+- **Remedy** — Split Phase (ch06)
+- **Verify** — You can name the module's single responsibility in one phrase, and one change lands in one place. Two signals that a class wants splitting: fields that share a prefix or suffix, and a subset of its behaviour that only one kind of client uses.
 
 ### M2 · No reaching through, no private deals
-- **Rule** — Do not navigate a chain of strangers to get work done (`a.getB().getC().doIt()`), and do not let two modules trade data they both keep private. But hiding everything is its own mistake — a class that only forwards is a middle man.
+- **Rule** — Ask the object that owns the data to do the work instead of navigating to it through others, and expose on each class only what its callers actually need.
 - **Signal** — Message Chains, Insider Trading, Middle Man (ch03)
 - **Counter-example** — `order.customer().address().city()` in fifteen call sites; two classes sharing a private field through a back channel.
-- **Remedy** — Hide Delegate, Remove Middle Man, Move Function/Field (ch07, ch08)
+- **Remedy** — Hide Delegate (ch07)
 - **Verify** — Each class's public surface is what its callers actually need — no more, no less.
 
 ### M3 · Nothing dead, nothing speculative
 - **Rule** — Delete code nobody calls and hooks nobody uses. Add flexibility only when changing it later would be genuinely hard — the third time you need it, not the first (Rule of Three).
 - **Signal** — Lazy Element, Speculative Generality (ch03)
 - **Counter-example** — An abstract `BaseHandler` with one subclass; a parameter no caller ever sets; a "for future use" interface.
-- **Remedy** — Remove Dead Code, Inline Function/Class, Collapse Hierarchy, Change Function Declaration (ch06, ch08, ch12)
+- **Remedy** — Remove Dead Code (ch08)
 - **Verify** — Every abstraction has at least two real users today, and version control remembers what you deleted.
 
 ---
@@ -184,14 +184,14 @@ into a refactoring step.
 - **Rule** — Inheritance says "is-a" and promises the whole interface works. When a subclass refuses part of what it inherits, or you only want the implementation, use delegation.
 - **Signal** — Refused Bequest (ch03)
 - **Counter-example** — `Stack extends Vector`, exposing `get(0)` and `removeRange()`; a subclass throwing `UnsupportedOperationException`.
-- **Remedy** — Replace Subclass with Delegate, Replace Superclass with Delegate, Push Down Method/Field (ch12)
+- **Remedy** — Replace Subclass with Delegate (ch12)
 - **Verify** — Every inherited member is meaningful in the subclass; no override exists only to disable something.
 
 ### I2 · A type code that drives behaviour wants to be a type
-- **Rule** — When behaviour branches on a type code, the variants are already classes that have not been written yet. But a small, stable branch is not worth the structure (see C4).
+- **Rule** — Give a type code that drives behaviour its own type: one class per variant, overrides instead of branches. Leave a small, stable branch alone (see C4).
 - **Signal** — Repeated Switches, Primitive Obsession (ch03)
 - **Counter-example** — `if (kind === 'A') ... else if (kind === 'B')` repeated across a module, plus constant strings scattered as literals.
-- **Remedy** — Replace Type Code with Subclasses, Replace Conditional with Polymorphism (ch12, ch10)
+- **Remedy** — Replace Type Code with Subclasses (ch12)
 - **Verify** — Adding a variant adds a class, not an `else if`.
 
 ### I3 · A published interface changes by migration, never by edit
@@ -220,7 +220,7 @@ into a refactoring step.
 - **Verify** — The test still passes after a pure refactoring of the code under test.
 
 ### T3 · Changing existing code starts from green
-- **Rule** — Run the suite first. If the area is uncovered, write tests that pin the current behaviour and watch them pass before touching anything. A red bar stops the work: roll back, then take a smaller step.
+- **Rule** — Run the suite first. If the area is uncovered, write tests that pin the current behaviour, watch them pass, then prove they can fail (break the code deliberately, see red, undo) before touching anything. A red bar you did not expect stops the work: roll back, then take a smaller step.
 - **Signal** — unexplained red bars (ch04, cheatsheet.md § Red-bar protocol)
 - **Counter-example** — "The tests were already failing, so I refactored anyway."
 - **Remedy** — Get back to green before any restructuring (cheatsheet.md)
@@ -245,7 +245,7 @@ into a refactoring step.
 - **Verify** — Deleting the comment loses no information a reader cannot get from the names.
 
 ### X2 · Keep the why, delete the what
-- **Rule** — A comment earns its place by recording something the code cannot: an external constraint, a citation, a surprising reason, a deliberate deviation. Comments that restate the code are a deodorant for a smell (ch03).
+- **Rule** — Write a comment only to record what the code cannot say — an external constraint, a citation, a surprising reason, a deliberate deviation — and delete the ones that restate the code.
 - **Signal** — Comments used as deodorant (ch03)
 - **Counter-example** — `// increment i by one`; `// call the service`; and a hundred-line function whose only defence is a header comment.
 - **Remedy** — Delete the noise; where the comment was hiding a real problem, fix the problem (ch06)
@@ -260,6 +260,10 @@ surfaces but does not fix in place: they change observable behaviour, so executi
 of them inside a refactoring breaks the one guarantee that makes refactoring safe
 (Two Hats, ch02). Name them, mark them as a separate task, and never let them ride
 along with a structural change.
+
+Security, error handling, performance and testability are deliberately absent here:
+they belong to the review skill's dimension table, not to a writing standard built on
+this book.
 
 ### H1 · Numeric precision and rounding
 - **Rule** — Money and other exact quantities do not live in binary floating point without a stated rounding policy. Decide the precision, the rounding mode and the moment of rounding once, and write it down.
