@@ -1,6 +1,6 @@
 ---
 name: coding-standard
-description: "Use this skill whenever code is being written, changed, reviewed, or explained: it is the coding standard, built from the 24 smells and 61 refactorings of Martin Fowler's Refactoring (2nd ed.) and turned into forward rules for new code plus a decision system for existing code. Trigger it for writing new code, adding a feature, code review, refactoring, smell detection, code quality, naming, long functions, long parameter lists, conditionals, inheritance versus delegation, and for learning or teaching these techniques. Also trigger on 编码规范, 代码规范, 写代码, 代码审查, 重构, 坏味道, 代码质量. Five scenarios — write new code / add a feature / review / refactor / learn — each loading only the file it needs: standard.md (rules), cheatsheet.md (decisions), patterns.md and chapters/ (depth)."
+description: "Use this skill whenever code is being written, changed, reviewed, or explained: it is the coding standard, built from the 24 smells and 61 refactorings of Martin Fowler's Refactoring (2nd ed.) and turned into forward rules for new code plus a decision system for existing code. Trigger it for writing new code, adding a feature, code review, refactoring, smell detection, code quality, naming, long functions, long parameter lists, conditionals, inheritance versus delegation, and for learning or teaching these techniques. Also trigger on 编码规范, 代码规范, 写代码, 代码审查, 重构, 坏味道, 代码质量. Six scenarios — write new code / add a feature / review / refactor / make the change / learn — each loading only the file it needs: standard.md (rules), cheatsheet.md (decisions), patterns.md and chapters/ (depth)."
 ---
 
 <!-- argument-hint: [scenario, topic, technique name, or chapter number] -->
@@ -21,7 +21,7 @@ decides which file is worth its context.
 | The user is… | Load | Answer with |
 |---|---|---|
 | writing new code | [standard.md](standard.md) — only the group matching what they are writing | Track C |
-| adding a feature to existing code | [standard.md](standard.md), then [cheatsheet.md](cheatsheet.md) § "When is it worth changing existing code" | Track A plan, then Track C |
+| adding a feature to existing code | [standard.md](standard.md) — the groups the feature touches, as when writing new code — then [cheatsheet.md](cheatsheet.md) § "When is it worth changing existing code" | Track A plan, then Track C |
 | reviewing code | [standard.md](standard.md) — the whole file is the checklist here, unlike the one-group rule for writing | Track A |
 | asking "should this change?" or refactoring | [cheatsheet.md](cheatsheet.md) first, [patterns.md](patterns.md) for the chosen remedy | Track A, then § Doing the change |
 | told to make the change ("just fix it") | as above, plus the checkpoints | § Doing the change |
@@ -49,9 +49,9 @@ Top to bottom, stop at the first hit:
 
 **Changing existing code**
 
-- 🔴 **Before answering** — if the change touches a published API, spans files, or is wide in scope, or if the user is only asking whether to change something: give the plan summary and the steps, then wait. Never change code the user did not ask you to change. "Just change it" waives the discussion of a small local change; it does not waive this rule for a published API, a cross-file change or a wide scope — those still get a summary first.
-- 🔴 **After each step** — compile (or run the language check) → the tests covering what you touched → the full suite → commit while green. Roll back on a red bar rather than pushing on, and tell the two kinds apart: a red bar you *expected* (a test written to expose a defect) is the work, a red bar you *caused* is a rollback.
-- 🛑 **STOP** — no test suite covering the target: plan only, do not touch the code. If the user explicitly says "just change it", pin the behaviour first: write the test, make it green, then prove it can fail (break the code deliberately, watch red, undo the break). A test that cannot be made to fail proves nothing.
+- 🔴 **Before changing anything** — never change code the user did not ask you to change. If the change touches a published API, spans files, or is wide in scope, give the plan summary and the steps, then wait. "Just change it" waives the discussion of a small local change; it does not waive this rule for a published API, a cross-file change or a wide scope — those still get a summary first. When the summary has nowhere to go because there is no user to answer (an autonomous run), Track A ③ says what to do instead of waiting. How much to *say* when the user only asked for a judgement is Track A's question, not this one (see Track A: ① and stop).
+- 🔴 **After each step** — the language check → the tests covering what you touched → the full suite → commit while green. Roll back on a red bar rather than pushing on.
+- 🛑 **STOP** — no test suite covering the target: plan only, do not touch the code. If the user explicitly says "just change it", pin the behaviour first: write the test that pins it, watch it pass, then prove it can fail — break the code deliberately, watch red, undo the break. A test that cannot be made to fail proves nothing. Distinguish the two red bars you will meet here: a red bar the break *exposed* is the proof you wanted; a red bar the code step *caused* is a rollback.
 - 🛑 **STOP — you cannot execute anything** (no repository mounted, tests not runnable here, no runtime): say so in as many words — "verification not executed" — and change nothing. Deliver the minimal-step plan, the target end state, and a checklist for the user to run it (green baseline → one step at a time → on any red bar, roll back that step). Never write a record claiming a test or a result you did not observe.
 
 **Writing new code**
@@ -67,11 +67,14 @@ request, not by habit.
 ### Track A — assess or plan (existing code)
 
 When the user asks only for a judgement ("should I change this?", "is this a problem?"),
-give ① and stop — a plan nobody asked for is noise. The rest of the track is for when
-they want the plan or the work.
+give ① and stop — a plan nobody asked for is noise. Read the request for a volume cap as
+well as a question: "just tell me whether", "a verdict is enough", "no detailed plan" all
+mean ① alone, and the rest of the track is only for a user who wants the plan or the
+work. The one thing that still gets said is a **correctness hazard** from ② — it is a
+separate task, not a plan, and it is the one finding the user cannot get from a verdict.
 
 - **① Verdict** — change it / leave it, plus one sentence of reason, citing the smell name (ch03) or the rule id.
-- **② Evidence** — every smell you found, by location (function / line / fragment) → first-response remedy (chNN); list them all, expand none. Nothing wrong? Then list the smells you ruled out and why, and separately flag any **correctness hazard** found ([standard.md](standard.md) §Hazards) as a separate task, never folded into the refactoring plan.
+- **② Evidence** — every smell you found, by location (function / line / fragment) → first-response remedy (chNN); list them all, expand none. Nothing wrong? Then list the smells you ruled out and why, and separately flag any **correctness hazard** found ([standard.md](standard.md) § Correctness hazards) as a separate task, never folded into the refactoring plan.
 - **③ Plan** — collect the **hard constraints** first: a frozen public API, single-file scope, no new dependencies, a time budget, anything else the user stated (if they said nothing, infer from the code and say what you inferred). Then produce *one* ordered path, not a menu — a shortlist of alternatives is not a plan. Every step = action + verification (compile / test / behaviour comparison) + what to do when it fails. Steps that touch a published API or span files carry 🔴 pending confirmation. Remedies that violate a hard constraint are listed as excluded, with the reason. Unresolved constraint conflicts → 🔴 state both sides and their consequences, ask the user to rule; do not pick silently. When there is no user to ask (an autonomous run), do not stall: state both sides, mark the assumption you proceeded on, and carry on with it flagged so it can be overturned. Code shape: intermediate steps give the fragment or the action described; the final form gets a complete code block.
 - **④ Tests and open questions** — which tests to write first (boundary values, watched red), how each step is re-verified, and only those business questions that change the plan.
 - **⑤ Not doing** — what is deliberately untouched (YAGNI, anti-pattern blacklist, out of scope, no suite → plan only) and the hazards from ② declared as "not in this plan". Do not lay out the whole catalogue at once: everything you *could* also fix, listed together, is over-refactoring.
@@ -108,13 +111,17 @@ When the user asks you to make the change rather than to judge it, plan it with 
 first, then run this loop. The loop is what separates a refactoring from a rewrite: every
 step is small, verified, and revertible on its own.
 
-1. **Baseline** — run the tests covering the target and confirm they are green. If coverage is thin, write the tests that pin the current behaviour and watch them pass. A red bar here is not an obstacle, it is the finding: the behaviour is not pinned yet.
+1. **Baseline** — run the tests covering the target and confirm they are green. If they do not cover it, write the test that pins the current behaviour and prove it can fail (break the code deliberately, watch red, undo) before touching anything. A red bar here is not an obstacle, it is the finding: the behaviour is not pinned yet.
 2. **Smallest step** — one behaviour-preserving change (rename, extract, pipeline, move). If a step needs two ideas at once, split it.
-3. **Verify, then commit** — language check → the covering tests → the full suite → commit while green. A red bar means roll back *this* step and take a smaller one; never debug forward on a red bar.
-4. **Repeat** — back to 2 until the plan is done.
-5. **Close out in the past tense** — state what was actually done and what each step's verification showed ("extracted `itemShippingFee`, suite green, committed"), not a to-do list of what should be done, and name what you deliberately did not do (Track A ⑤). **When the loop cannot run as written.** It bends; it does not break:
+3. **Verify, then commit** — run the language check, then the tests covering what you touched, then the full suite, then commit while green. Each step leaves one line of evidence: the command and the result you observed. A step with no observed result is not verified — and a claim without a result is the one thing this loop exists to prevent. A red bar means roll back *this* step and take a smaller one; never debug forward on a red bar.
 
-- **No repository to commit to.** Do not fake it. Either make a scratch copy and initialise a repository there, so each step really is a revertible commit, or say plainly that the commit step is unavailable and hand the steps over as a patch. Never write "committed" when nothing was committed.
+   **A red bar caused by a requested behaviour change is a third kind, not a rollback.** When you add or change a feature, an existing test may have pinned the very contract the user asked you to change. That bar is neither expected-red-by-design nor an accident: rolling back would mean not doing the work. Locate the assertion, state what it pinned, and update it *inside the change that invalidates it* — never in a separate "fix the tests" commit, because the diff that explains the change and the diff that proves it must move together. Name the updated assertion in the close-out. The freeze rule still holds for everything the request did not ask you to change.
+4. **Repeat** — back to 2 until the plan is done.
+5. **Close out in the past tense** — state what was actually done and what each step's verification showed ("extracted `itemShippingFee`, suite green, committed"), not a to-do list of what should be done, and name what you deliberately did not do (Track A ⑤).
+
+**When the loop cannot run as written.** It bends; it does not break:
+
+- **No repository to commit to.** Do not fake it. Either make a scratch copy and initialise a repository there, so each step really is a revertible commit, or say plainly that the commit step is unavailable and hand the steps over as a patch. Never write "committed" when nothing was committed. This is not bookkeeping: the commit is what makes a *deliberate break* undoable. Where a step's work is not committed, undo a break by restoring the files you saved, never with `git checkout -- <path>` or its equivalent — that discards every uncommitted change in those files, including the step you were in the middle of.
 - **No suite covering the target.** The pinning tests are then yours, not the project's — say so, and keep them with the change so the next person inherits them.
 - **A differential check is a legitimate second opinion, not a green bar.** Running the original and the changed code side by side over the same inputs and comparing the results is the strongest evidence available when the real suite is out of reach. Name it a differential check, state which inputs it covered and which it did not, and never report it as "the tests pass". If you had to alter the code to make it testable — an added `export`, a seam, a stub — disclose that what you verified is not byte-identical to what you delivered.
 - **Nothing runnable at all.** Then you are not in this loop: use the "verification not executed" branch of the checkpoints.
@@ -123,6 +130,8 @@ step is small, verified, and revertible on its own.
 language is, produce the changed code *in that language*: translate the mechanism
 (pipeline → streams or generators, subclass override → interface implementation,
 factory → constructor or static method) and keep the identifiers idiomatic to that
+language. Technique names stay as named; the mechanism is what matters.
+
 ## Anti-pattern blacklist
 
 Stop when you hit one of these.
@@ -148,13 +157,16 @@ Stop when you hit one of these.
 | [glossary.md](glossary.md) | Terms, each with its chNN source |
 | [chapters/](chapters/) | ch01–ch13 digests, read on demand |
 | [test-prompts.json](test-prompts.json) | **Evaluation material, not a loading target** — the probes this skill is tested with, including their expected answers. Never read it to answer a user, and never let it shape a reply. |
+| [evals/](evals/) | **Evaluation material, not a loading target** — the same probes as a runnable eval set, with the checks each one is graded on, the fixture repo some of them run against, and `artifact_order.py`, which decides the order-and-landing checks from file metadata rather than from the answer's own account of itself. Same rule: never load it to answer a user. |
 
 **Bilingual glosses** — inside this skill's own files, each of the 61 techniques and the
 24 smells carries its Chinese name in full-width parentheses at first mention, because
 those are the two indexes a reader of the Chinese edition looks things up by; other book
-concepts keep a Chinese gloss only in [glossary.md](glossary.md). This governs the skill
-files, not your answer: answer in the user's language and add a Chinese gloss only when
-the user is reading Chinese and the technique's name is doing real work in the reply.
+concepts keep a Chinese gloss only in [glossary.md](glossary.md). In an answer, add the
+Chinese name only when the user is reading Chinese and the technique's name is doing real
+work in the reply: a reader who knows the English name does not need the pair spelled out
+every time, and repeating it across a long answer costs attention the answer could spend
+on the code.
 
 ## Chapter index
 

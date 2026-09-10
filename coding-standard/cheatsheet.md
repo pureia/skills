@@ -100,7 +100,7 @@ agree, following them in order is the safest path.
 
 - Two-step moves: remove local variables before extracting; move fields before moving functions.
 - Split Phase: the intermediate structure is immutable, one context per phase.
-- Performance: measure, find the hotspot, optimise the hotspot, measure again.
+- Performance: measure, find the hotspot, optimise the hotspot, measure again. A pipeline is not free either — a two-pass `map`+`reduce` measured 11–15× slower than the loop it replaced, so measure the rewrite rather than assuming the loop was the slow part.
 - Thresholds that start a conversation: a function past ~6 lines; the same code seen a third time (Rule of Three); a name longer than its body is fine (the `highlight → reverse` case).
 - Test frequency: the tests covering what you are touching, every few minutes; the full suite, at least daily.
 - Every bug: the test that exposes it comes first, and the fix is done when that test passes.

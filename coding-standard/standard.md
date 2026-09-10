@@ -142,14 +142,19 @@ into a refactoring step.
 - **Counter-example** — `switch (employee.type)` in `pay()`, `benefits()` and `schedule()`, each updated when a type is added.
 - **Remedy** — Replace Conditional with Polymorphism (ch10)
 - **Verify** — Adding a new variant means adding one thing in one place.
-- **Counter-example that is not a smell** — A single switch, in one place, over stable branches. Polymorphism buys indirection you will pay for at every read; use a data table instead (ch10).
+- **Counter-example to the remedy** — A single switch, in one place, over stable branches. Polymorphism buys indirection you will pay for at every read; use a data table instead (ch10).
 
 ### C5 · A pipeline over a hand-rolled loop, one job per pass
 - **Rule** — Express data transformation as filter/map/reduce (or the language's equivalent) so the intent is visible. A loop doing two jobs is two loops.
 - **Signal** — Loops (ch03)
 - **Counter-example** — A `for` loop accumulating a total, collecting names and counting failures in one pass, with three index variables.
 - **Remedy** — Replace Loop with Pipeline (ch08)
-- **Verify** — The data flow reads in one direction with no index arithmetic.
+- **Before you reach for it** — a pipeline is only equivalent to a loop when the collection is dense, every element has to be visited, and the operation is associative. Ask the three questions first, because each one has been measured to break a real refactoring:
+  1. **Is the collection always dense?** A pipeline built on `map`/`reduce` visits only present elements. Measured: an index loop over a sparse array threw `TypeError`, the `reduce` rewrite returned a number, and a plain array-like object went the other way — the loop returned a value, the pipeline threw (`eval-6`, two independent runs).
+  2. **Can the loop stop early?** `break`/`return` has no pipeline equivalent; the rewrite visits every element. That matters when elements have effects or the collection is unbounded.
+  3. **Is the operation order-sensitive?** Floating-point addition is not associative. Measured: `mapToDouble().sum()` against a sequential `+=` disagreed on **20,787 of 200,000** random orders; a two-pass `map`+`reduce` ran **11–15× slower** than the loop it replaced (`eval-7`, `replication/run-5`).
+  When one of the three fails, the loop is not a smell — it is the correct expression of the job, and the refactoring is a behaviour change wearing a structure-change costume.
+- **Verify** — The data flow reads in one direction with no index arithmetic, **and** the three precondition questions are answered for this collection: dense, no early exit, associative.
 
 ---
 
