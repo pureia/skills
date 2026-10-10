@@ -75,3 +75,46 @@
 **Type Code（类型码）** — Expressing a variant with a string/number; eliminate it with Replace Type Code with Subclasses + polymorphism (ch12).
 
 **Value Object vs Reference Object（值对象 vs 引用对象）** — Small and without identity → a value (replace wholesale); large and needing identity → a reference (shared through a repository) (ch09).
+
+## 中文索引
+
+按中文名查英文名与出处（定义见上）。同一概念在别处出现时沿用这里的英文名。
+
+- **坏味道** → Bad Smell (ch03)
+- **分支合并成本** → Branch Merge Cost (ch02)
+- **重构名录** → Catalog (ch05)
+- **函数组合成类/变换** → Combine Functions into Class/Transform (ch06)
+- **命令** → Command (ch11)
+- **数据与行为** → Data and Behavior (ch03)
+- **纯数据类** → Data Class (ch03)
+- **数据泥团** → Data Clumps (ch03)
+- **设计耐久性假说** → Design Stamina Hypothesis (ch02)
+- **依恋情结** → Feature Envy (ch03)
+- **测试夹具** → Fixture (ch04)
+- **卫语句** → Guard Clause (ch10)
+- **内幕交易** → Insider Trading (ch03)
+- **冗赘的元素** → Lazy Element (ch03)
+- **令修改容易** → Making Change Easy (ch02)
+- **消息链** → Message Chain (ch03)
+- **中间人** → Middle Man (ch03)
+- **命名** → Naming (ch03)
+- **可观察行为** → Observable Behavior (ch02)
+- **基本类型偏执** → Primitive Obsession (ch03)
+- **已发布接口** → Published Interface (ch02)
+- **重构（名词）** → Refactoring (noun) (ch02)
+- **重构（动词）** → Refactoring (verb) (ch02)
+- **被拒绝的遗赠** → Refused Bequest (ch01)
+- **重构的节奏** → Rhythm of Refactoring (ch01)
+- **三次法则** → Rule of Three (ch02)
+- **自测试代码** → Self-Testing Code (ch04)
+- **语义距离** → Semantic Distance (ch03)
+- **银钳子** → Silver Pliers (ch02)
+- **特例** → Special Case (ch10)
+- **夸夸其谈通用性** → Speculative Generality (ch03)
+- **临时字段** → Temporary Field (ch03)
+- **测试覆盖率** → Test Coverage (ch04)
+- **测试驱动开发** → Test-Driven Development (TDD) (ch04)
+- **三类变化的坏味道对** → Three-Change Smell Pair (ch03)
+- **两顶帽子** → Two Hats (ch02)
+- **类型码** → Type Code (ch12)
+- **值对象 vs 引用对象** → Value Object vs Reference Object (ch09)

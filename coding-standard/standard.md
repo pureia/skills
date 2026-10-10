@@ -1,6 +1,6 @@
-# The Standard — 31 rules
+# The Standard — 27 rules + 4 correctness hazards
 
-Read the group that matches what you are writing, not the file. Every rule has the
+Read the group that matches what you are writing, not the file. All 27 rules carry the
 same five fields:
 
 - **Rule** — what must hold.

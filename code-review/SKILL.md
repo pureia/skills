@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: "Reviews code for correctness, maintainability, and project standards. Invoke when user asks for code review or before merging changes."
+description: "Reviews code for correctness, maintainability, and project standards (the Fowler-derived coding standard, or the repo's own). Invoke when user asks for code review or before merging changes."
 ---
 
 # Code Reviewer

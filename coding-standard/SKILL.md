@@ -1,15 +1,15 @@
 ---
 name: coding-standard
-description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Style and formatting stay out of scope."
+description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Linter, formatter and style-config requests are out of scope."
 ---
 
 # Coding Standard
 
 The same knowledge read in two directions. Forward — "I am writing this, what must
-it satisfy?" — is [standard.md](standard.md): 31 rules, each traceable to a smell or
-a remedy in *Refactoring*, 2nd ed. Backward — "this code smells, now what?" — is
-[cheatsheet.md](cheatsheet.md). Depth lives in [patterns.md](patterns.md) (61
-techniques) and [chapters/](chapters/) (ch01–ch13).
+it satisfy?" — is [standard.md](standard.md): 27 rules plus 4 NON-BOOK hazards, each
+traceable to a smell or a remedy in *Refactoring*, 2nd ed. Backward — "this code
+smells, now what?" — is [cheatsheet.md](cheatsheet.md). Depth lives in
+[patterns.md](patterns.md) (61 techniques) and [chapters/](chapters/) (ch01–ch13).
 
 ## Pick the scenario first
 
@@ -124,12 +124,6 @@ step is small, verified, and revertible on its own.
 - **A differential check is a legitimate second opinion, not a green bar.** Running the original and the changed code side by side over the same inputs and comparing the results is the strongest evidence available when the real suite is out of reach. Name it a differential check, state which inputs it covered and which it did not, and never report it as "the tests pass". If you had to alter the code to make it testable — an added `export`, a seam, a stub — disclose that what you verified is not byte-identical to what you delivered.
 - **Nothing runnable at all.** Then you are not in this loop: use the "verification not executed" branch of the checkpoints.
 
-**Language adaptation** — the book's examples are JavaScript. Whatever the user's
-language is, produce the changed code *in that language*: translate the mechanism
-(pipeline → streams or generators, subclass override → interface implementation,
-factory → constructor or static method) and keep the identifiers idiomatic to that
-language. Technique names stay as named; the mechanism is what matters.
-
 ## Anti-pattern blacklist
 
 Stop when you hit one of these.
@@ -149,11 +143,12 @@ Stop when you hit one of these.
 
 | File | Role |
 |---|---|
-| [standard.md](standard.md) | The rules: 31 entries in 9 groups, each rule → signal → counter-example → remedy → verification |
+| [standard.md](standard.md) | The rules: 27 entries + 4 NON-BOOK hazards in 9 groups; a rule → signal → counter-example → remedy → verify, a hazard → rule → counter-example → verify |
 | [cheatsheet.md](cheatsheet.md) | Decisions for existing code: when to act, red-bar protocol, failure fallbacks, 24 smells → remedy, priority criteria, popular practice vs Fowler |
 | [patterns.md](patterns.md) | The 61 techniques: when to use / how / tradeoff |
 | [glossary.md](glossary.md) | Terms, each with its chNN source |
 | [chapters/](chapters/) | ch01–ch13 digests, read on demand |
+| [CHANGELOG.md](CHANGELOG.md) | What changed between versions of this skill, and why — read it before editing |
 | [test-prompts.json](test-prompts.json) | **Evaluation material, not a loading target** — the probes this skill is tested with, including their expected answers. Never read it to answer a user, and never let it shape a reply. |
 | Maintenance | Keep this file's `description` under **500 characters** — the catalog truncates at 500, and the Chinese trigger phrases must stay inside that window to be seen at all. Eval material (probes, checks, fixtures) lives in the git-ignored `<skill-name>-workspace/`, never in the shipped skill. |
 
@@ -197,7 +192,7 @@ on the code.
 - **Repeated Switches / Loops** → ch03, ch08, ch10, standard.md C4–C5
 - **Lazy Element / Speculative Generality** → ch03, ch06, ch12, standard.md M3
 - **Temporary Field / Message Chains / Middle Man / Insider Trading** → ch03, ch07, ch08, standard.md M2
-- **Large Class / Alternative Classes / Data Class / Refused Bequest / Comments** → ch03, ch07, ch11, ch12, standard.md I1–I3, X1–X2
+- **Large Class / Alternative Classes with Different Interfaces / Data Class / Refused Bequest / Comments** → ch03, ch07, ch11, ch12, standard.md I1–I3, X1–X2
 - **TDD / self-testing code** → ch04, standard.md T1–T4
 - **Query/modifier separation, parameterization, flags, command, factory** → ch11, standard.md F2
 - **Polymorphism, special case, assertions, guard clauses** → ch10, standard.md C1–C4
