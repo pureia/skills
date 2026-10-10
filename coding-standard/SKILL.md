@@ -3,8 +3,6 @@ name: coding-standard
 description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Style and formatting stay out of scope."
 ---
 
-<!-- argument-hint: [scenario, topic, technique name, or chapter number] -->
-
 # Coding Standard
 
 The same knowledge read in two directions. Forward — "I am writing this, what must
