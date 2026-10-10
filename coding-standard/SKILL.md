@@ -1,6 +1,6 @@
 ---
 name: coding-standard
-description: "Use this skill whenever code is being written, changed, reviewed, or explained: it is the coding standard, built from the 24 smells and 61 refactorings of Martin Fowler's Refactoring (2nd ed.) and turned into forward rules for new code plus a decision system for existing code. Trigger it for writing new code, adding a feature, code review, refactoring, smell detection, code quality, naming, long functions, long parameter lists, conditionals, inheritance versus delegation, and for learning or teaching these techniques. Also trigger on 编码规范, 代码规范, 写代码, 代码审查, 重构, 坏味道, 代码质量. Six scenarios — write new code / add a feature / review / refactor / make the change / learn — each loading only the file it needs: standard.md (rules), cheatsheet.md (decisions), patterns.md and chapters/ (depth)."
+description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Style and formatting stay out of scope."
 ---
 
 <!-- argument-hint: [scenario, topic, technique name, or chapter number] -->
@@ -157,7 +157,7 @@ Stop when you hit one of these.
 | [glossary.md](glossary.md) | Terms, each with its chNN source |
 | [chapters/](chapters/) | ch01–ch13 digests, read on demand |
 | [test-prompts.json](test-prompts.json) | **Evaluation material, not a loading target** — the probes this skill is tested with, including their expected answers. Never read it to answer a user, and never let it shape a reply. |
-| [evals/](evals/) | **Evaluation material, not a loading target** — the same probes as a runnable eval set, with the checks each one is graded on, the fixture repo some of them run against, and `artifact_order.py`, which decides the order-and-landing checks from file metadata rather than from the answer's own account of itself. Same rule: never load it to answer a user. |
+| Maintenance | Keep this file's `description` under **500 characters** — the catalog truncates at 500, and the Chinese trigger phrases must stay inside that window to be seen at all. Eval material (probes, checks, fixtures) lives in the git-ignored `<skill-name>-workspace/`, never in the shipped skill. |
 
 **Bilingual glosses** — inside this skill's own files, each of the 61 techniques and the
 24 smells carries its Chinese name in full-width parentheses at first mention, because
