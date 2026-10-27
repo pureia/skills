@@ -107,6 +107,12 @@ for (const f of ["patterns.md", "SKILL.md"]) {
   ok(/thirteen/i.test(text[f]), `${f}: does not say thirteen fragments`);
 }
 
+// 11. self-contained: no other skill is named in the package. The CHANGELOG is
+// exempt because it has to be able to explain this rule.
+for (const [f, t] of content) {
+  ok(!/code-review/i.test(t), `${f}: names another skill (code-review)`);
+}
+
 if (failures.length) {
   console.log("FAIL");
   for (const f of failures) console.log("  - " + f);

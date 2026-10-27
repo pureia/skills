@@ -1,6 +1,6 @@
 ---
 name: coding-standard
-description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Covers one file or snippet; for a diff since a commit, branch or PR, use code-review. Linter, formatter and style-config requests are out of scope."
+description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Works on one file, a snippet, or a pasted diff. Linter, formatter and style-config requests are out of scope."
 ---
 
 # Coding Standard
@@ -208,24 +208,6 @@ follow it; when it does not exist, say so rather than inventing a rule. What *is
 scope is whether a name means what it says, whether a function is doing one job,
 whether the data lives with its behaviour — the design questions a formatter cannot
 decide.
-
-## Neighbouring skills
-
-Two skills in this catalog touch the same ground. The boundary is worth stating once,
-because both used to answer to "review this code" and neither said which.
-
-- **code-review** owns a review of a *diff* — a branch, a PR, "since X". It splits the
-  work into a Standards axis and a Spec axis and runs them as parallel sub-agents.
-  This skill owns the deeper design vocabulary for *one file or snippet*, and the
-  24-smell table it carries. When both are in play, code-review supplies the diff and
-  the spec; this file supplies the smell names and remedies. Do not run two smell hunts
-  over the same lines and then reconcile them in prose.
-- **tdd** owns red-green-refactor as a way of *building*. This skill states the same
-  discipline where it bears on *refactoring* (T1–T4, the red-bar protocol) and stops
-  there. It does not teach TDD, and a user who wants to learn it should be sent to that
-  skill rather than given a summary of it here.
-
-Style and linter questions belong to neither — see § Out of scope, above.
 
 ## Scope and limits
 

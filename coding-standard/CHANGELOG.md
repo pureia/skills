@@ -3,6 +3,27 @@
 Sections are gists, not diffs: what changed about how the skill behaves or is loaded.
 Git holds the full history.
 
+## v5.2 — decoupled from code-review
+
+> v5 and v5.1 built a boundary between this skill and `code-review`, in both
+> directions. This entry removes this side of it, and records why.
+
+- **The hand-off is gone.** The description no longer sends diffs to `code-review`,
+  and § Neighbouring skills is deleted. A trigger contract that names another skill is
+  only as reliable as that skill's presence in the catalog: where it is not installed
+  the instruction points at nothing, and where a *different* skill of the same name is
+  installed it points at the wrong thing — which is what this repository turned out to
+  contain.
+- **This package stands alone.** It works on a file, a snippet, or a pasted diff, with
+  no repository, tracker or companion skill assumed. The 24-smell table and the rules
+  are self-contained.
+- **Trade-off, stated rather than hidden.** With the boundary clause gone, "review this
+  code" can again match both this skill and a review skill. Routing between skills is
+  the catalog's job; a package cannot do it from inside its own description.
+- **The reverse pointer stays optional.** A review skill may name this one for its smell
+  vocabulary; that is integration on that side and does not make this package depend on
+  it. v5's "both sides" claim is superseded by this entry.
+
 ## v5.1 — after review
 
 > The review of `815e18e` found three P0s. This entry is the response; where v5 is
