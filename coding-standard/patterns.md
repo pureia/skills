@@ -90,9 +90,10 @@
 
 ## Fragments
 
-> Before/after for the twelve techniques a review or an answer reaches for most often.
-> JavaScript, because the book's examples are; take the mechanism, not the syntax, into
-> another language. Fuller mechanics live in `chapters/ch06–ch12`.
+> A working set, not a ranking: thirteen of the 61 that an answer most often has to
+> show rather than describe. JavaScript, because the book's examples are; take the
+> mechanism, not the syntax, into another language. Fuller mechanics live in
+> `chapters/ch06–ch12`.
 
 **T-06.1 · Extract Function（提炼函数）**
 ```javascript
@@ -183,7 +184,7 @@ function payAmount(e) {
   if (e.isSeparated) { r = {amount: 0, reason: "SEP"}; }
   else {
     if (e.isRetired) { r = {amount: 0, reason: "RET"}; }
-    else { r = {amount: regularPay(e), reason: "MAIN"}; }
+    else { r = {amount: baseAmount(e), reason: "MAIN"}; }
   }
   return r;
 }
@@ -191,9 +192,39 @@ function payAmount(e) {
 function payAmount(e) {
   if (e.isSeparated) return {amount: 0, reason: "SEP"};
   if (e.isRetired)   return {amount: 0, reason: "RET"};
-  return {amount: regularPay(e), reason: "MAIN"};
+  return {amount: baseAmount(e), reason: "MAIN"};
 }
 ```
+This is the same change ch10 walks through — one helper name, one shape. If you edit
+one, edit both.
+
+**T-10.4 · Replace Conditional with Polymorphism（以多态取代条件表达式）**
+```javascript
+// before — one switch per behaviour, and a new species edits every one of them
+function plumage(bird) {
+  switch (bird.type) {
+    case "EuropeanSwallow": return "average";
+    case "AfricanSwallow":  return bird.coconuts > 2 ? "tired" : "average";
+  }
+}
+function airSpeedVelocity(bird) {
+  switch (bird.type) {
+    case "EuropeanSwallow": return 35;
+    case "AfricanSwallow":  return 40 - 2 * bird.coconuts;
+  }
+}
+// after — the branch moves onto the variant; a new species is a class, not another case
+class EuropeanSwallow {
+  get plumage() { return "average"; }
+  get airSpeedVelocity() { return 35; }
+}
+class AfricanSwallow {
+  get plumage() { return this.coconuts > 2 ? "tired" : "average"; }
+  get airSpeedVelocity() { return 40 - 2 * this.coconuts; }
+}
+```
+Unlike T-12.6, this one assumes the types already exist: the job is to move the
+behaviour onto them, not to invent the hierarchy.
 
 **T-10.5 · Introduce Special Case（引入特例）**
 ```javascript
@@ -220,15 +251,17 @@ function alertForMiscreant(people) {
 // after — the query answers, the modifier acts
 function findMiscreant(people) { ... return ""; }
 function alertForMiscreant(people) { if (findMiscreant(people)) setOffAlarms(); }
+// callers that need the name now call findMiscreant(); alertForMiscreant() returns nothing
 ```
 
 **T-11.3 · Remove Flag Argument（移除标记参数）**
 ```javascript
 // before — the call site reads as a magic boolean
-bookConcert(customer, true);
-// after — two names, no flag
-bookPremiumConcert(customer);
-bookStandardConcert(customer);
+bookConcert(customer, true);        // premium
+bookConcert(customer, false);       // standard, at a different call site
+// after — the flag becomes part of the name; each site calls the one it means, once
+bookPremiumConcert(customer);       // this site
+// the site that passed false now calls bookStandardConcert(customer)
 ```
 
 **T-12.6 · Replace Type Code with Subclasses（以子类取代类型码）**
