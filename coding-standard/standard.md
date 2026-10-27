@@ -60,7 +60,7 @@ into a refactoring step.
 
 ### F1 · Small enough to read in one screen, named for the one thing it does
 - **Rule** — Extract until each function does one thing and its name says what that is. A one-line function is fine when the name carries meaning the body does not; length alone is never the reason to extract or not to extract.
-- **Signal** — Long Function (ch03) — around six lines is where the smell starts.
+- **Signal** — Long Function (ch03) — around six lines is where the *question* starts, not the quota: the smell is a body whose reader cannot name its one job, and length is only what made you look.
 - **Counter-example** — `handleOrder()` that validates, prices, persists and emails; a nested `if` ladder inside it.
 - **Remedy** — Extract Function (ch06). When temporaries block extraction: Replace Temp with Query → Introduce Parameter Object → Replace Function with Command — reach for the command only when the parameters or the state are complex enough that you want to run it in steps; otherwise it stays a function (ch06, ch07, ch11).
 - **Verify** — The function fits one screen and its name is a complete sentence about the domain.
@@ -149,11 +149,14 @@ into a refactoring step.
 - **Signal** — Loops (ch03)
 - **Counter-example** — A `for` loop accumulating a total, collecting names and counting failures in one pass, with three index variables.
 - **Remedy** — Replace Loop with Pipeline (ch08)
-- **Before you reach for it** — a pipeline is only equivalent to a loop when the collection is dense, every element has to be visited, and the operation is associative. Ask the three questions first, because each one has been measured to break a real refactoring:
-  1. **Is the collection always dense?** A pipeline built on `map`/`reduce` visits only present elements. Measured: an index loop over a sparse array threw `TypeError`, the `reduce` rewrite returned a number, and a plain array-like object went the other way — the loop returned a value, the pipeline threw (`eval-6`, two independent runs).
-  2. **Can the loop stop early?** `break`/`return` has no pipeline equivalent; the rewrite visits every element. That matters when elements have effects or the collection is unbounded.
-  3. **Is the operation order-sensitive?** Floating-point addition is not associative. Measured: `mapToDouble().sum()` against a sequential `+=` disagreed on **20,787 of 200,000** random orders; a two-pass `map`+`reduce` ran **11–15× slower** than the loop it replaced (`eval-7`, `replication/run-5`).
+- **Before you reach for it** — a pipeline is only equivalent to a loop when the collection is dense, every element has to be visited, and the operation is associative. Each of the three changes the answer silently when it fails:
+  1. **Is the collection always dense?** `map`/`reduce` skip holes; an index loop visits them as `undefined`. On `[1, , 3]` the loop accumulates `NaN` while the `reduce` returns 4 — same array, different answer. The method also has to exist: an array-like such as `arguments` loops fine and has no `reduce`.
+  2. **Can the loop stop early?** `break`/`return` has no `filter`/`map` equivalent; the rewrite visits every element. That matters when elements have effects or the collection is unbounded. `some`/`find` still short-circuit — the loss belongs to this pipeline, not to every rewrite.
+  3. **Is the operation order-sensitive?** Floating-point addition is not associative: `(0.1 + 0.2) + 0.3` is `0.6000000000000001` and `0.1 + (0.2 + 0.3)` is `0.6`. A rewrite that re-associates the sum — a parallel reduction, a different grouping, an extra pass — changes the last bits. Summing the same 200,000 doubles in 200 random orders gave 140 distinct totals.
+
   When one of the three fails, the loop is not a smell — it is the correct expression of the job, and the refactoring is a behaviour change wearing a structure-change costume.
+
+  **The cost is real, and it is not a constant.** Measured in Node 22 (one machine, V8) on 10⁵–10⁶ elements, `filter`+`map`+`reduce` ran 6–20× slower than the loop doing the same filtering; at 10³ elements the two were indistinguishable (0.9×). A pipeline is neither free nor reliably slow: the ratio is a property of the size and the element type, not of pipelines. Measure the collection in front of you, before and after.
 - **Verify** — The data flow reads in one direction with no index arithmetic, **and** the three precondition questions are answered for this collection: dense, no early exit, associative.
 
 ---
@@ -267,8 +270,8 @@ of them inside a refactoring breaks the one guarantee that makes refactoring saf
 along with a structural change.
 
 Security, error handling, performance and testability are deliberately absent here:
-they belong to the review skill's dimension table, not to a writing standard built on
-this book.
+they are review dimensions of their own, not part of a writing standard built on this
+book.
 
 ### H1 · Numeric precision and rounding
 - **Rule** — Money and other exact quantities do not live in binary floating point without a stated rounding policy. Decide the precision, the rounding mode and the moment of rounding once, and write it down.

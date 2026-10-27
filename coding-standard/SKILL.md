@@ -1,13 +1,13 @@
 ---
 name: coding-standard
-description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Linter, formatter and style-config requests are out of scope."
+description: "Use whenever code is written, reviewed, refactored or explained. Trigger on code review, refactoring, code smells, naming, long functions or parameter lists, conditionals, inheritance vs delegation, and on 编码规范, 代码规范, 代码审查, 重构, 坏味道. Covers one file or snippet; for a diff since a commit, branch or PR, use code-review. Linter, formatter and style-config requests are out of scope."
 ---
 
 # Coding Standard
 
 The same knowledge read in two directions. Forward — "I am writing this, what must
 it satisfy?" — is [standard.md](standard.md): 27 rules plus 4 NON-BOOK hazards, each
-traceable to a smell or a remedy in *Refactoring*, 2nd ed. Backward — "this code
+traceable to a smell, a technique or a practice in *Refactoring*, 2nd ed. Backward — "this code
 smells, now what?" — is [cheatsheet.md](cheatsheet.md). Depth lives in
 [patterns.md](patterns.md) (61 techniques) and [chapters/](chapters/) (ch01–ch13).
 
@@ -20,7 +20,7 @@ decides which file is worth its context.
 |---|---|---|
 | writing new code | [standard.md](standard.md) — only the group matching what they are writing | Track C |
 | adding a feature to existing code | [standard.md](standard.md) — the groups the feature touches, as when writing new code — then [cheatsheet.md](cheatsheet.md) § "When is it worth changing existing code" | Track A plan, then Track C |
-| reviewing code | [standard.md](standard.md) — the whole file is the checklist here, unlike the one-group rule for writing | Track A |
+| reviewing code | [standard.md](standard.md) — the whole file is the checklist here, unlike the one-group rule for writing — plus [cheatsheet.md](cheatsheet.md) § "Smell → remedy" when the question is "what smells are here?" rather than "does it meet the rule?" | Track A |
 | asking "should this change?" or refactoring | [cheatsheet.md](cheatsheet.md) first, [patterns.md](patterns.md) for the chosen remedy | Track A, then § Doing the change |
 | told to make the change ("just fix it") | as above, plus the checkpoints | § Doing the change |
 | learning or teaching a technique | [patterns.md](patterns.md), then the chapter | Track B |
@@ -40,7 +40,7 @@ Top to bottom, stop at the first hit:
 7. **The user proposes a popular practice** (Optional, Strategy, Null Object) → [cheatsheet.md](cheatsheet.md) § "Popular practice vs Fowler's position" first, then answer from the book's position.
 8. **Not in the book at all** → say so plainly, reason from the book's principles, and never invent a chapter citation. Three shapes of this: a practice the book never treats (RxJS, framework idioms, a language's own style); a real smell with **no named refactoring behind it** (magic literals — say so and use the nearest rule, e.g. N3, rather than reaching for a chapter); and "is X even in this skill?" — answer from § Out of scope or from the rule ids, and do not go searching the package for absence.
 9. **A companion file cannot be read** (missing, unreadable, or the client loaded only this file) → say so, then answer from what is actually here: the scenario table, the checkpoints, and the anti-pattern blacklist. Never invent rule ids, chapter numbers or technique mechanics you could not read — a thinner answer that is true beats a rich one that is guessed.
-10. **The user names a chapter** (ch10, "the one about conditionals") → load that file from [chapters/](chapters/) directly; that is what the argument hint takes chapter numbers for.
+10. **The user names a chapter** (ch10, "the one about conditionals") → load that file from [chapters/](chapters/) directly, and answer by chapter number — never by page number, which this package does not carry.
 11. **Nothing to route on** — no scenario, no code, no topic → [cheatsheet.md](cheatsheet.md) is the default decision entry; if even that is unclear, ask what they are working on instead of guessing.
 
 ## 🔴 Checkpoints
@@ -145,12 +145,11 @@ Stop when you hit one of these.
 |---|---|
 | [standard.md](standard.md) | The rules: 27 entries + 4 NON-BOOK hazards in 9 groups; a rule → signal → counter-example → remedy → verify, a hazard → rule → counter-example → verify |
 | [cheatsheet.md](cheatsheet.md) | Decisions for existing code: when to act, red-bar protocol, failure fallbacks, 24 smells → remedy, priority criteria, popular practice vs Fowler |
-| [patterns.md](patterns.md) | The 61 techniques: when to use / how / tradeoff |
+| [patterns.md](patterns.md) | The 61 techniques: when to use / how / tradeoff, plus before/after fragments for the twelve most reached for (§ Fragments) |
 | [glossary.md](glossary.md) | Terms, each with its chNN source |
 | [chapters/](chapters/) | ch01–ch13 digests, read on demand |
 | [CHANGELOG.md](CHANGELOG.md) | What changed between versions of this skill, and why — read it before editing |
-| [test-prompts.json](test-prompts.json) | **Evaluation material, not a loading target** — the probes this skill is tested with, including their expected answers. Never read it to answer a user, and never let it shape a reply. |
-| Maintenance | Keep this file's `description` under **500 characters** — the catalog truncates at 500, and the Chinese trigger phrases must stay inside that window to be seen at all. Eval material (probes, checks, fixtures) lives in the git-ignored `<skill-name>-workspace/`, never in the shipped skill. |
+| Maintenance | Keep this file's `description` under **500 characters** — the catalog truncates at 500, and the Chinese trigger phrases must stay inside that window to be seen at all. Eval material — the probes with their expected answers, the fixtures, `check.mjs`, `measurements.mjs` — lives in `../coding-standard-workspace/`, never in the shipped skill: an answer key inside the package is one a model can read, and "never read it" is not a control. This package is a git repository; commit every change with its reason. |
 
 **Bilingual glosses** — inside this skill's own files, each of the 61 techniques and the
 24 smells carries its Chinese name in full-width parentheses at first mention, because
@@ -210,12 +209,30 @@ scope is whether a name means what it says, whether a function is doing one job,
 whether the data lives with its behaviour — the design questions a formatter cannot
 decide.
 
+## Neighbouring skills
+
+Two skills in this catalog touch the same ground. The boundary is worth stating once,
+because both used to answer to "review this code" and neither said which.
+
+- **code-review** owns a review of a *diff* — a branch, a PR, "since X". It splits the
+  work into a Standards axis and a Spec axis and runs them as parallel sub-agents.
+  This skill owns the deeper design vocabulary for *one file or snippet*, and the
+  24-smell table it carries. When both are in play, code-review supplies the diff and
+  the spec; this file supplies the smell names and remedies. Do not run two smell hunts
+  over the same lines and then reconcile them in prose.
+- **tdd** owns red-green-refactor as a way of *building*. This skill states the same
+  discipline where it bears on *refactoring* (T1–T4, the red-bar protocol) and stops
+  there. It does not teach TDD, and a user who wants to learn it should be sent to that
+  skill rather than given a summary of it here.
+
+Style and linter questions belong to neither — see § Out of scope, above.
+
 ## Scope and limits
 
 The knowledge base is *Refactoring: Improving the Design of Existing Code*, 2nd ed.
-(Martin Fowler). Every rule in [standard.md](standard.md) is traceable to a smell
-(ch03) or a technique (ch06–ch12) — except the four **correctness hazards** (§H1–H4),
-which are marked NON-BOOK, are surfaced but never executed inside a refactoring, and
-always leave as their own task. The book's examples are JavaScript; the mechanisms
-are language-agnostic. This skill is synthesized from the book's content and contains
-no original text from it.
+(Martin Fowler). Every rule in [standard.md](standard.md) traces back to a smell (ch03),
+a technique (ch06–ch12), or a testing practice (ch04) — except the four **correctness
+hazards** (§H1–H4), which are marked NON-BOOK, are surfaced but never executed inside a
+refactoring, and always leave as their own task. The book's examples are JavaScript; the
+mechanisms are language-agnostic. This skill is synthesized from the book's content and
+contains no original text from it.

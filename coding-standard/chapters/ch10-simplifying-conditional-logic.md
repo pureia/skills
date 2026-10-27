@@ -45,16 +45,26 @@ The conditional-logic group rewrites judgment code in which "not every branch ma
 ## Worked Example
 Replace Nested Conditional with Guard Clauses:
 ```javascript
-// before
+// before — the special cases are nested; the main line sits three levels in
 function payAmount(employee) {
-  if (employee.isSeparated) { return {amount: 0, reason: "SEP"}; }
-  if (employee.isRetired) { return {amount: 0, reason: "RET"}; }
-  // main-line calculation
-  ...
+  let result;
+  if (employee.isSeparated) {
+    result = {amount: 0, reason: "SEP"};
+  } else {
+    if (employee.isRetired) {
+      result = {amount: 0, reason: "RET"};
+    } else {
+      result = {amount: baseAmount(employee), reason: "MAIN"};
+    }
+  }
+  return result;
 }
-// after (inverted into early exits)
-if (employee.isSeparated) return {amount: 0, reason: "SEP"};
-if (employee.isRetired) return {amount: 0, reason: "RET"};
+// after — invert each special case into an early exit: same behaviour, no else, main line at the left margin
+function payAmount(employee) {
+  if (employee.isSeparated) return {amount: 0, reason: "SEP"};
+  if (employee.isRetired)   return {amount: 0, reason: "RET"};
+  return {amount: baseAmount(employee), reason: "MAIN"};
+}
 ```
 Follow-up: both early exits return a default of the same shape — this is exactly the signal for Introduce Special Case, and the branches can be removed further with `Nothing`/`Retired` special cases.
 

@@ -3,6 +3,37 @@
 Sections are gists, not diffs: what changed about how the skill behaves or is loaded.
 Git holds the full history.
 
+## v5 — evidence, boundary, and the answer key
+- **Evaluation material left the package.** `test-prompts.json` now lives in
+  `../coding-standard-workspace/`, next to `check.mjs` and `measurements.mjs`. The
+  answer key used to sit in the shipped directory, protected only by an instruction not
+  to read it; the file table no longer points at it.
+- **`standard.md` C5 states measurements with conditions, not artifact ids.** The
+  `eval-6` / `eval-7` / `replication/run-5` citations pointed into a git-ignored
+  workspace that does not ship, so no reader could check them. Replaced with the
+  observed results and their scope — Node 22, 10⁵–10⁶ elements, 6–20×; 10³ elements,
+  0.9× — and the sparse-array outcome corrected: a numeric hole gives the loop `NaN`,
+  not a `TypeError`.
+- **Boundary with `code-review` stated on both sides.** This description now says
+  file-or-snippet and sends diffs elsewhere; § Neighbouring skills states the split;
+  `code-review` points back here for the 24-smell table. Before this, two skills both
+  answered "code review" from two diverging smell lists and neither mentioned the other.
+- **Facts fixed.** Glossary: Refused Bequest ch01 → ch03/ch12, Middle Man ch03 →
+  ch03/ch07, and the Naming entry no longer attributes the "two hardest things" quip to
+  ch03. ch10's worked example now shows an actual nested conditional as its "before"
+  (it previously showed the answer twice). `standard.md` no longer points at an
+  undefined "review skill's dimension table". § Scope admits that T1–T4 trace to ch04
+  practices, not to a ch03 smell or a ch06–ch12 technique. The stale `argument-hint`
+  reference is gone.
+- **Review routing fixed.** A review now loads the smell table with the rules; before,
+  the row called `standard.md` "the whole checklist" and left the smells to be
+  inferred from `Signal` fields.
+- **Before/after fragments** for the twelve most-used techniques in `patterns.md`, so
+  Track B's "at least one fragment" can be shown from the package rather than invented.
+- **Thresholds say what they are.** ~Six lines marks where the question starts, not a
+  quota; the pipeline performance number carries its size and language.
+- **The package is versioned.** `git log` here is the history this file only summarises.
+
 ## v4 — trigger surface fits the catalog budget
 - `description` 792 → 294 characters. The catalog truncates at 500, so the Chinese
   trigger words and the scenario routing used to be cut off before the model saw them.
@@ -28,6 +59,8 @@ Git holds the full history.
 - 24 smells, 61 refactorings and 13 chapter digests, routed by scenario.
 
 ## Eval material
-Not in this directory. Probes and expected answers ship as `test-prompts.json`
-(evaluation material — never a loading target); runnable eval sets, checks and fixtures
-live in the git-ignored `coding-standard-workspace/`.
+
+Not in this directory. Probes with their expected answers live in
+`../coding-standard-workspace/test-prompts.json`; `check.mjs` (inventory, ids, links,
+glossary consistency) and `measurements.mjs` (the numbers quoted in `standard.md` C5)
+sit beside it. Nothing carrying an expected answer ships inside the package.

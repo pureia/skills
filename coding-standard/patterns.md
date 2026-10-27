@@ -1,6 +1,6 @@
 # Refactoring Techniques (61)
 
-> All **61** refactoring techniques in this skill. Each entry: **English name（中文名）** — When | How | Tradeoff. Each group's `##` heading marks its chapter and count; for detailed mechanics see `chapters/ch06–ch12`.
+> All **61** refactoring techniques in this skill. Each entry: **English name（中文名）** — When | How | Tradeoff. Each group's `##` heading marks its chapter and count; for detailed mechanics see `chapters/ch06–ch12`. The twelve most reached for also carry a before/after fragment in [§ Fragments](#fragments) — show that one rather than inventing one.
 
 **Jump table** — each technique carries a stable id `T-chNN.n`; cite it, and jump by group:
 
@@ -11,6 +11,7 @@
 - **Simplifying Conditional Logic** (ch10) — T-10.1 – T-10.6 → [ch10](chapters/ch10-simplifying-conditional-logic.md)
 - **Refactoring APIs** (ch11) — T-11.1 – T-11.10 → [ch11](chapters/ch11-refactoring-apis.md)
 - **Dealing with Inheritance** (ch12) — T-12.1 – T-12.11 → [ch12](chapters/ch12-dealing-with-inheritance.md)
+- **Fragments** — before/after for the twelve most reached for → [§ Fragments](#fragments)
 
 ## First Set (ch06) — 11 techniques — [ch06](chapters/ch06-first-set-of-refactorings.md)
 - **T-06.1 · Extract Function（提炼函数）** — When: a stretch of code you have to browse through to understand | How: name it as a function by "what it does"; handle out-of-scope variables as parameters/queries | Tradeoff: short functions depend on good naming; performance is rarely harmed
@@ -86,3 +87,158 @@
 - **T-12.9 · Collapse Hierarchy（折叠继承体系）** — When: the hierarchy has lost its meaning | How: merge, then delete the subclass | Tradeoff: once drained, collapse it
 - **T-12.10 · Replace Subclass with Delegate（以委托取代子类）** — When: the subclass refuses the interface / multi-dimensional variation | How: a delegate field + forwarding | Tradeoff: dispenses with the disguise of "is-a"
 - **T-12.11 · Replace Superclass with Delegate（以委托取代超类）** — When: the superclass leaks too much of its interface | How: aggregate + forward what is needed | Tradeoff: composition beats inheritance
+
+## Fragments
+
+> Before/after for the twelve techniques a review or an answer reaches for most often.
+> JavaScript, because the book's examples are; take the mechanism, not the syntax, into
+> another language. Fuller mechanics live in `chapters/ch06–ch12`.
+
+**T-06.1 · Extract Function（提炼函数）**
+```javascript
+// before — the comment is the function name you have not written yet
+function printOwing(invoice) {
+  let outstanding = 0;
+  for (const o of invoice.orders) outstanding += o.amount;   // calculate outstanding
+  console.log(`name: ${invoice.customer}`);                  // print details
+  console.log(`amount: ${outstanding}`);
+}
+// after
+function printOwing(invoice) {
+  const outstanding = calculateOutstanding(invoice);
+  printDetails(invoice, outstanding);
+}
+```
+
+**T-06.8 · Introduce Parameter Object（引入参数对象）**
+```javascript
+// before — the pair travels together through every signature
+function amountInvoiced(start, end) { ... }
+function amountReceived(start, end) { ... }
+// after — one object, and the behaviour can move onto it later
+class DateRange {
+  constructor(start, end) { this.start = start; this.end = end; }
+}
+function amountInvoiced(range) { ... }
+```
+
+**T-07.4 · Replace Temp with Query（以查询取代临时变量）**
+```javascript
+// before
+const basePrice = this.quantity * this.itemPrice;
+if (basePrice > 1000) return basePrice * 0.95;
+return basePrice * 0.98;
+// after — the temporary becomes a query the callers can ask
+get basePrice() { return this.quantity * this.itemPrice; }
+if (this.basePrice > 1000) return this.basePrice * 0.95;
+return this.basePrice * 0.98;
+```
+
+**T-07.5 · Extract Class（提炼类）**
+```javascript
+// before — one class, two reasons to change
+class Person { name; officeAreaCode; officeNumber; telephone() { ... } }
+// after — the phone number moves out, and the behaviour goes with it
+class Person { name; office = new TelephoneNumber(...); }
+class TelephoneNumber { areaCode; number; toString() { ... } }
+```
+
+**T-08.8 · Replace Loop with Pipeline（以管道取代循环）**
+```javascript
+// before
+let total = 0;
+for (const line of order.lines) if (line.qty > 0) total += line.price * line.qty;
+// after — allowed because the three preconditions hold: dense, no early exit, integers
+const total = order.lines
+  .filter(line => line.qty > 0)
+  .map(line => line.price * line.qty)
+  .reduce((a, b) => a + b, 0);
+```
+
+**T-09.3 · Replace Derived Variable with Query（以查询取代派生变量）**
+```javascript
+// before — every update path must remember to call recalculate()
+this.discount = 0;
+recalculate() { this.discount = this.basePrice * this.discountRate; }
+// after — no update path left to forget
+get discount() { return this.basePrice * this.discountRate; }
+```
+
+**T-10.1 · Decompose Conditional（分解条件表达式）**
+```javascript
+// before
+if (date.before(SUMMER_START) || date.after(SUMMER_END))
+  charge = quantity * winterRate + winterServiceCharge;
+else charge = quantity * summerRate;
+// after — the condition and each branch say what they mean
+if (notSummer(date)) charge = winterCharge(quantity);
+else charge = summerCharge(quantity);
+```
+
+**T-10.3 · Replace Nested Conditional with Guard Clauses（以卫语句取代嵌套条件表达式）**
+```javascript
+// before — nested, so the main line is the last thing you read
+function payAmount(e) {
+  let r;
+  if (e.isSeparated) { r = {amount: 0, reason: "SEP"}; }
+  else {
+    if (e.isRetired) { r = {amount: 0, reason: "RET"}; }
+    else { r = {amount: regularPay(e), reason: "MAIN"}; }
+  }
+  return r;
+}
+// after — the special cases leave; the main line returns at the margin
+function payAmount(e) {
+  if (e.isSeparated) return {amount: 0, reason: "SEP"};
+  if (e.isRetired)   return {amount: 0, reason: "RET"};
+  return {amount: regularPay(e), reason: "MAIN"};
+}
+```
+
+**T-10.5 · Introduce Special Case（引入特例）**
+```javascript
+// before — the same default shape is re-decided at every call site
+if (customer === null) plan = BillingPlan.basic();
+if (customer === null) name = "occupant";
+// after — one special case answers for all of them
+class UnknownCustomer {
+  get plan() { return BillingPlan.basic(); }
+  get name() { return "occupant"; }
+}
+const customer = site.customer ?? new UnknownCustomer();
+plan = customer.plan;
+name = customer.name;
+```
+
+**T-11.1 · Separate Query from Modifier（将查询函数和修改函数分离）**
+```javascript
+// before — the "query" also sets off the alarms
+function alertForMiscreant(people) {
+  for (const p of people) if (p === "Don") { setOffAlarms(); return "Don"; }
+  return "";
+}
+// after — the query answers, the modifier acts
+function findMiscreant(people) { ... return ""; }
+function alertForMiscreant(people) { if (findMiscreant(people)) setOffAlarms(); }
+```
+
+**T-11.3 · Remove Flag Argument（移除标记参数）**
+```javascript
+// before — the call site reads as a magic boolean
+bookConcert(customer, true);
+// after — two names, no flag
+bookPremiumConcert(customer);
+bookStandardConcert(customer);
+```
+
+**T-12.6 · Replace Type Code with Subclasses（以子类取代类型码）**
+```javascript
+// before — one switch, repeated wherever pay is asked for
+switch (employee.type) {
+  case "engineer": return employee.monthlySalary;
+  case "salesman": return employee.monthlySalary + employee.commission;
+}
+// after — adding a variant adds a class, not another case
+class Engineer extends Employee { get pay() { return this.monthlySalary; } }
+class Salesman extends Employee { get pay() { return this.monthlySalary + this.commission; } }
+```

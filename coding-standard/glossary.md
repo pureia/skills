@@ -34,7 +34,7 @@
 
 **Middle Man（中间人）** — A class whose interface is half nothing but delegated forwarding; handle it with Remove Middle Man or Inline Function (ch03, ch07).
 
-**Naming（命名）** — One of the two hardest things in programming; if you cannot think of a good name, there is probably a deeper design problem behind it (ch03).
+**Naming（命名）** — A name that does not say what the thing means; the signal is needing a comment to explain it. If no honest name comes to mind, the design underneath is usually still unclear (ch03).
 
 **Observable Behavior（可观察行为）** — The invariant in the definition of refactoring: the behavior the user cares about stays the same before and after refactoring; performance and the internal call stack may change (ch02).
 
@@ -96,14 +96,14 @@
 - **冗赘的元素** → Lazy Element (ch03)
 - **令修改容易** → Making Change Easy (ch02)
 - **消息链** → Message Chain (ch03)
-- **中间人** → Middle Man (ch03)
+- **中间人** → Middle Man (ch03, ch07)
 - **命名** → Naming (ch03)
 - **可观察行为** → Observable Behavior (ch02)
 - **基本类型偏执** → Primitive Obsession (ch03)
 - **已发布接口** → Published Interface (ch02)
 - **重构（名词）** → Refactoring (noun) (ch02)
 - **重构（动词）** → Refactoring (verb) (ch02)
-- **被拒绝的遗赠** → Refused Bequest (ch01)
+- **被拒绝的遗赠** → Refused Bequest (ch03, ch12)
 - **重构的节奏** → Rhythm of Refactoring (ch01)
 - **三次法则** → Rule of Three (ch02)
 - **自测试代码** → Self-Testing Code (ch04)
