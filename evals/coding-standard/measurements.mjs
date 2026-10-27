@@ -1,5 +1,5 @@
 // Reproduces the numbers quoted in standard.md § C5.
-// Run: node measurements.mjs
+// Run from the repo root: node evals/coding-standard/measurements.mjs
 //
 // The float-shuffle line is seeded: it prints the same count on every run.
 // The timing ratios are not stable by nature — each size reports the ratio from

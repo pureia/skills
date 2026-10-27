@@ -20,8 +20,8 @@ Git holds the full history.
   with no implied ranking.
 - **The measurements reproduce.** `measurements.mjs` now seeds its shuffle and times a
   fixed amount of work, so the counts stop moving between runs. The numbers in
-  `standard.md` are what the script prints: 3.5–4× at 10³–10⁴ elements, 18–21× at
-  10⁵–10⁶, 136 distinct totals. v5's "10³ indistinguishable (0.9×)" was timer noise —
+  `standard.md` are what the script prints: about 3.5–4× at 10³–10⁴ elements, about
+  18–21× at 10⁵–10⁶, and 136 distinct totals. v5's "10³ indistinguishable (0.9×)" was timer noise —
   at that size the clock, not the pipeline, was being measured.
 - **The boundary is real on both sides.** v5 said so, but only the installed
   `code-review` had the return pointer; `code-review/SKILL.md` in this repository now
@@ -37,8 +37,8 @@ Git holds the full history.
   starting points rather than rules.
 
 ## v5 — evidence, boundary, and the answer key
-- **Evaluation material left the package.** `test-prompts.json` now lives in
-  `../coding-standard-workspace/`, next to `check.mjs` and `measurements.mjs`. The
+- **Evaluation material left the package.** `test-prompts.json` moved out of the
+  shipped directory, next to `check.mjs` and `measurements.mjs`. The
   answer key used to sit in the shipped directory, protected only by an instruction not
   to read it; the file table no longer points at it.
 - **`standard.md` C5 states measurements with conditions, not artifact ids.** The
@@ -57,7 +57,7 @@ Git holds the full history.
   ch03/ch07, and the Naming entry no longer attributes the "two hardest things" quip to
   ch03. ch10's worked example now shows an actual nested conditional as its "before"
   (it previously showed the answer twice). `standard.md` no longer gestures at "the
-  review skill's dimension table", a reference no reader could resolve. § Scope admits
+  review skill's dimension table", a reference no reader could resolve (see v5.1). § Scope admits
   that T1–T4 trace to ch04 practices, not to a ch03 smell or a ch06–ch12 technique. The
   stale `argument-hint` reference is gone.
 - **Review routing fixed.** A review now loads the smell table with the rules; before,
@@ -96,6 +96,6 @@ Git holds the full history.
 ## Eval material
 
 Not in this directory. Probes with their expected answers live in
-`../coding-standard-workspace/test-prompts.json`; `check.mjs` (inventory, ids, links,
+`../evals/coding-standard/test-prompts.json`; `check.mjs` (inventory, ids, links,
 glossary consistency) and `measurements.mjs` (the numbers quoted in `standard.md` C5)
 sit beside it. Nothing carrying an expected answer ships inside the package.

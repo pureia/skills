@@ -1,6 +1,6 @@
 # Refactoring Techniques (61)
 
-> All **61** refactoring techniques in this skill. Each entry: **English name（中文名）** — When | How | Tradeoff. Each group's `##` heading marks its chapter and count; for detailed mechanics see `chapters/ch06–ch12`. The twelve most reached for also carry a before/after fragment in [§ Fragments](#fragments) — show that one rather than inventing one.
+> All **61** refactoring techniques in this skill. Each entry: **English name（中文名）** — When | How | Tradeoff. Each group's `##` heading marks its chapter and count; for detailed mechanics see `chapters/ch06–ch12`. Thirteen of them — a working set, not a ranking — also carry a before/after fragment in [§ Fragments](#fragments); show that one rather than inventing one.
 
 **Jump table** — each technique carries a stable id `T-chNN.n`; cite it, and jump by group:
 
@@ -11,7 +11,7 @@
 - **Simplifying Conditional Logic** (ch10) — T-10.1 – T-10.6 → [ch10](chapters/ch10-simplifying-conditional-logic.md)
 - **Refactoring APIs** (ch11) — T-11.1 – T-11.10 → [ch11](chapters/ch11-refactoring-apis.md)
 - **Dealing with Inheritance** (ch12) — T-12.1 – T-12.11 → [ch12](chapters/ch12-dealing-with-inheritance.md)
-- **Fragments** — before/after for the twelve most reached for → [§ Fragments](#fragments)
+- **Fragments** — before/after for thirteen of them, a working set → [§ Fragments](#fragments)
 
 ## First Set (ch06) — 11 techniques — [ch06](chapters/ch06-first-set-of-refactorings.md)
 - **T-06.1 · Extract Function（提炼函数）** — When: a stretch of code you have to browse through to understand | How: name it as a function by "what it does"; handle out-of-scope variables as parameters/queries | Tradeoff: short functions depend on good naming; performance is rarely harmed

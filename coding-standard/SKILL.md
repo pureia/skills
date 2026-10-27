@@ -231,7 +231,7 @@ Style and linter questions belong to neither — see § Out of scope, above.
 
 The knowledge base is *Refactoring: Improving the Design of Existing Code*, 2nd ed.
 (Martin Fowler). Every rule in [standard.md](standard.md) traces back to a smell (ch03),
-a technique (ch06–ch12), or a testing practice (ch04) — except the four **correctness
+a technique (ch06–ch12), or a testing practice (T1–T4, ch04) — except the four **correctness
 hazards** (§H1–H4), which are marked NON-BOOK, are surfaced but never executed inside a
 refactoring, and always leave as their own task. The book's examples are JavaScript; the
 mechanisms are language-agnostic. This skill is synthesized from the book's content and

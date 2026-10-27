@@ -94,6 +94,19 @@ for (const [f, t] of content) {
   ok(!/review skill's dimension table/.test(t), `${f}: refers to a dimension table that does not exist`);
 }
 
+// 10. no pointer at a directory that no longer exists, and the fragment caption
+// must match what the fragment section actually contains.
+for (const [f, t] of Object.entries(text)) {
+  ok(!t.includes("coding-standard-workspace"), `${f}: still names the removed workspace directory`);
+}
+const fragSection = text["patterns.md"].slice(text["patterns.md"].indexOf("## Fragments"));
+const fragCount = (fragSection.match(/^\*\*T-\d\d\.\d+ ·/gm) || []).length;
+ok(fragCount === 13, `patterns.md: expected 13 fragments, found ${fragCount}`);
+for (const f of ["patterns.md", "SKILL.md"]) {
+  ok(!/twelve/i.test(text[f]), `${f}: still says twelve fragments`);
+  ok(/thirteen/i.test(text[f]), `${f}: does not say thirteen fragments`);
+}
+
 if (failures.length) {
   console.log("FAIL");
   for (const f of failures) console.log("  - " + f);
