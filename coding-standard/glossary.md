@@ -34,7 +34,7 @@
 
 **Middle Man（中间人）** — A class whose interface is half nothing but delegated forwarding; handle it with Remove Middle Man or Inline Function (ch03, ch07).
 
-**Naming（命名）** — A name that does not say what the thing means; the signal is needing a comment to explain it. If no honest name comes to mind, the design underneath is usually still unclear (ch03).
+**Naming（命名）** — The act of choosing a name that says what the thing means; a design decision, not a spelling one. Its failure mode is the Mysterious Name smell, and the signal of that failure is needing a comment to explain the name. If no honest name comes to mind, the design underneath is usually still unclear (ch03).
 
 **Observable Behavior（可观察行为）** — The invariant in the definition of refactoring: the behavior the user cares about stays the same before and after refactoring; performance and the internal call stack may change (ch02).
 

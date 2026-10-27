@@ -3,6 +3,39 @@
 Sections are gists, not diffs: what changed about how the skill behaves or is loaded.
 Git holds the full history.
 
+## v5.1 — after review
+
+> The review of `815e18e` found three P0s. This entry is the response; where v5 is
+> corrected, the correction is stated rather than quietly edited into v5.
+
+- **`T-11.3` was wrong.** Its "after" called `bookPremiumConcert` *and*
+  `bookStandardConcert`, turning one booking into two — a behaviour change wearing a
+  refactoring's clothes (H4), in the section that exists to teach the difference. One
+  call site now calls one function.
+- **`T-11.1` closes its loop.** The split dropped `alertForMiscreant`'s return value;
+  the fragment now says callers that need the name call `findMiscreant`.
+- **`T-10.4` added.** The polymorphism fragment was missing while `T-12.6` stood in
+  for it. The two now show different jobs: moving behaviour onto types that already
+  exist, versus creating the hierarchy. The fragments are a working set of thirteen,
+  with no implied ranking.
+- **The measurements reproduce.** `measurements.mjs` now seeds its shuffle and times a
+  fixed amount of work, so the counts stop moving between runs. The numbers in
+  `standard.md` are what the script prints: 3.5–4× at 10³–10⁴ elements, 18–21× at
+  10⁵–10⁶, 136 distinct totals. v5's "10³ indistinguishable (0.9×)" was timer noise —
+  at that size the clock, not the pipeline, was being measured.
+- **The boundary is real on both sides.** v5 said so, but only the installed
+  `code-review` had the return pointer; `code-review/SKILL.md` in this repository now
+  points at the 24-smell table too. v5 also called the review skill's dimension table
+  "undefined" — this repository's review skill has one (Security, Crash, Logic, Error,
+  Performance, Testability, Maintainability, Readability), and the standard now states
+  its own omission directly instead of pointing sideways at it.
+- **Eval material is versioned.** Probes, checker and measurement script moved from the
+  git-ignored workspace into `../evals/coding-standard/`, so a change to the tests is a
+  reviewable diff rather than invisible state.
+- **Smaller:** the Naming glossary entry described the smell instead of the act;
+  § Scope names T1–T4; the six-line threshold and the pipeline ratio each say they are
+  starting points rather than rules.
+
 ## v5 — evidence, boundary, and the answer key
 - **Evaluation material left the package.** `test-prompts.json` now lives in
   `../coding-standard-workspace/`, next to `check.mjs` and `measurements.mjs`. The
@@ -11,20 +44,22 @@ Git holds the full history.
 - **`standard.md` C5 states measurements with conditions, not artifact ids.** The
   `eval-6` / `eval-7` / `replication/run-5` citations pointed into a git-ignored
   workspace that does not ship, so no reader could check them. Replaced with the
-  observed results and their scope — Node 22, 10⁵–10⁶ elements, 6–20×; 10³ elements,
-  0.9× — and the sparse-array outcome corrected: a numeric hole gives the loop `NaN`,
-  not a `TypeError`.
+  measured behaviour and its conditions, and the sparse-array outcome corrected: a
+  numeric hole gives the loop `NaN`, not a `TypeError`. (The first numbers quoted here
+  were single samples; v5.1 replaces them with the ranges the script prints.)
 - **Boundary with `code-review` stated on both sides.** This description now says
   file-or-snippet and sends diffs elsewhere; § Neighbouring skills states the split;
-  `code-review` points back here for the 24-smell table. Before this, two skills both
-  answered "code review" from two diverging smell lists and neither mentioned the other.
+  the installed `code-review` skill points back here for the 24-smell table. Before
+  this, two skills both answered "code review" from two diverging smell lists and
+  neither mentioned the other. (Only the installed copy had the return pointer —
+  v5.1 adds the repository's own.)
 - **Facts fixed.** Glossary: Refused Bequest ch01 → ch03/ch12, Middle Man ch03 →
   ch03/ch07, and the Naming entry no longer attributes the "two hardest things" quip to
   ch03. ch10's worked example now shows an actual nested conditional as its "before"
-  (it previously showed the answer twice). `standard.md` no longer points at an
-  undefined "review skill's dimension table". § Scope admits that T1–T4 trace to ch04
-  practices, not to a ch03 smell or a ch06–ch12 technique. The stale `argument-hint`
-  reference is gone.
+  (it previously showed the answer twice). `standard.md` no longer gestures at "the
+  review skill's dimension table", a reference no reader could resolve. § Scope admits
+  that T1–T4 trace to ch04 practices, not to a ch03 smell or a ch06–ch12 technique. The
+  stale `argument-hint` reference is gone.
 - **Review routing fixed.** A review now loads the smell table with the rules; before,
   the row called `standard.md` "the whole checklist" and left the smells to be
   inferred from `Signal` fields.

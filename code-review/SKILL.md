@@ -58,6 +58,8 @@ Analyze changes against the following dimensions. **Only report issues that meet
 | **Maintainability** | SUGGESTION | Magic numbers, missing documentation, unclear module boundaries |
 | **Readability** | SUGGESTION | Misleading names, inconsistent conventions, excessive function length |
 
+**Design-level smells.** The Maintainability and Readability rows score a symptom; they do not name the disease. For Fowler's design smells — Long Function, Feature Envy, Refused Bequest and the rest — the `coding-standard` skill carries the 24-smell table with first-response refactorings and their chapter sources. When that skill is installed, name the smell from its list and keep this table's severity for the report; do not invent a second vocabulary in this skill's wording.
+
 #### Severity Definitions
 
 | Severity | Meaning | When to Use |

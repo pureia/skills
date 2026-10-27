@@ -145,11 +145,11 @@ Stop when you hit one of these.
 |---|---|
 | [standard.md](standard.md) | The rules: 27 entries + 4 NON-BOOK hazards in 9 groups; a rule → signal → counter-example → remedy → verify, a hazard → rule → counter-example → verify |
 | [cheatsheet.md](cheatsheet.md) | Decisions for existing code: when to act, red-bar protocol, failure fallbacks, 24 smells → remedy, priority criteria, popular practice vs Fowler |
-| [patterns.md](patterns.md) | The 61 techniques: when to use / how / tradeoff, plus before/after fragments for the twelve most reached for (§ Fragments) |
+| [patterns.md](patterns.md) | The 61 techniques: when to use / how / tradeoff, plus before/after fragments for thirteen of them (§ Fragments) |
 | [glossary.md](glossary.md) | Terms, each with its chNN source |
 | [chapters/](chapters/) | ch01–ch13 digests, read on demand |
 | [CHANGELOG.md](CHANGELOG.md) | What changed between versions of this skill, and why — read it before editing |
-| Maintenance | Keep this file's `description` under **500 characters** — the catalog truncates at 500, and the Chinese trigger phrases must stay inside that window to be seen at all. Eval material — the probes with their expected answers, the fixtures, `check.mjs`, `measurements.mjs` — lives in `../coding-standard-workspace/`, never in the shipped skill: an answer key inside the package is one a model can read, and "never read it" is not a control. This package is a git repository; commit every change with its reason. |
+| Maintenance | Keep this file's `description` under **500 characters** — the catalog truncates at 500, and the Chinese trigger phrases must stay inside that window to be seen at all. Eval material — the probes with their expected answers, the fixtures, `check.mjs`, `measurements.mjs` — lives in `../evals/coding-standard/`, never in the shipped skill: an answer key inside the package is one a model can read, and "never read it" is not a control. Keep it versioned anyway — a test whose change is invisible is a test nobody reviews. Commit every change, in the package or in the evals, with its reason. |
 
 **Bilingual glosses** — inside this skill's own files, each of the 61 techniques and the
 24 smells carries its Chinese name in full-width parentheses at first mention, because
